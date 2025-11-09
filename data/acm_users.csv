@@ -1,0 +1,8 @@
+user,resource,read,write,delete
+alice,model.pkl,read,write,delete
+alice,audit.log,read,write
+alice,report.csv,read,write,delete
+bob,model.pkl,read,write
+bob,audit.log,read
+bob,report.csv,read,write
+eve,report.csv,read

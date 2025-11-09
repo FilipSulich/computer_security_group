@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 import asyncio, asyncssh, os, struct, stat
 import logging, traceback
+from typing import Tuple
+from server.policy import authorize
 
 # Console debug logging for AsyncSSH
 logging.basicConfig(
@@ -15,7 +17,7 @@ logging.getLogger("asyncio").setLevel(logging.INFO)
 HOST_KEY_PATH = './ssh_host_ed25519_key'
 LISTEN_HOST, LISTEN_PORT = '', 2222
 SFTP_SUBSYSTEM_NAME = 'sftp'
-JAIL_ROOT = os.path.abspath('./sftp_root')
+JAIL_ROOT = os.path.abspath('./computer_security_group/sftp_root')
 
 # --- SFTP constants (subset for INIT/REALPATH/OPENDIR/READDIR/CLOSE) ---
 SSH_FXP_INIT, SSH_FXP_VERSION = 1, 2
@@ -114,6 +116,7 @@ class SFTPSession(asyncssh.SSHServerSession):
         self.handles = Handles()
         self.initialized = False
         self._sftp_ok = False
+        self.username = None  # Store authenticated username
 
     # Ensure the channel uses *binary* I/O from the start
     def connection_made(self, chan):
@@ -166,6 +169,21 @@ class SFTPSession(asyncssh.SSHServerSession):
             p_u32(req_id) + p_u32(code) + p_str(msg) + p_str(b"")
         ))
 
+    def _check_authorization(self, operation: str, full_path: str) -> Tuple[bool, str]:
+        """
+        Check authorization using the policy module.
+        Returns (allowed, reason)
+        """
+        if not self.username:
+            return False, "No authenticated user"
+
+        try:
+            allowed, reason = authorize(self.username, operation, full_path)
+            return allowed, reason
+        except Exception as e:
+            print(f"[AUTHZ ERROR] {e}")
+            return False, f"Authorization error: {str(e)}"
+
     def _handle(self, pkt: bytes):
         ptype = pkt[0]
         payload = pkt[1:]
@@ -201,6 +219,13 @@ class SFTPSession(asyncssh.SSHServerSession):
                     # Debug every REALPATH, not just "."
                     print(f"[REALPATH] request: {path!r} -> canon: {canon} -> full: {safe_join(JAIL_ROOT, path)}")
 
+                    # Authorization check
+                    allowed, reason = self._check_authorization("stat", full)
+                    if not allowed:
+                        print(f"[AUTHZ DENIED] {reason}")
+                        self._send_status(req_id, SSH_FX_PERMISSION_DENIED, reason.encode())
+                        return
+
                     st = os.stat(full)
                     attrs = sftp_attrs_from_stat(st)
                 except FileNotFoundError:
@@ -218,6 +243,14 @@ class SFTPSession(asyncssh.SSHServerSession):
             elif ptype in (SSH_FXP_STAT, SSH_FXP_LSTAT):
                 path, off = ustr(payload, off)
                 full = safe_join(JAIL_ROOT, path)
+
+                # Authorization check
+                allowed, reason = self._check_authorization("stat", full)
+                if not allowed:
+                    print(f"[AUTHZ DENIED] {reason}")
+                    self._send_status(req_id, SSH_FX_PERMISSION_DENIED, reason.encode())
+                    return
+
                 try:
                     st = os.lstat(full) if ptype == SSH_FXP_LSTAT else os.stat(full)
                 except FileNotFoundError:
@@ -230,6 +263,14 @@ class SFTPSession(asyncssh.SSHServerSession):
             elif ptype == SSH_FXP_OPENDIR:
                 path, off = ustr(payload, off)
                 full = safe_join(JAIL_ROOT, path)
+
+                # Authorization check
+                allowed, reason = self._check_authorization("list", full)
+                if not allowed:
+                    print(f"[AUTHZ DENIED] {reason}")
+                    self._send_status(req_id, SSH_FX_PERMISSION_DENIED, reason.encode())
+                    return
+
                 entries = list(os.scandir(full))
                 handle = self.handles.add(DirHandle(entries))
                 self._chan.write(pack_pkt(SSH_FXP_HANDLE, p_u32(req_id) + handle))
@@ -264,6 +305,14 @@ class SFTPSession(asyncssh.SSHServerSession):
                     full = safe_join(JAIL_ROOT, path)  # map "/demo" -> <jail>\demo
                     # Debug (optional): print to console so you can see the resolved path
                     print(f"[MKDIR] request: {path!r} -> full: {full}")
+
+                    # Authorization check
+                    allowed, reason = self._check_authorization("create", full)
+                    if not allowed:
+                        print(f"[AUTHZ DENIED] {reason}")
+                        self._send_status(req_id, SSH_FX_PERMISSION_DENIED, reason.encode())
+                        return
+
                     os.makedirs(full, exist_ok=False)  # create exactly one dir
                 except FileExistsError:
                     self._send_status(req_id, SSH_FX_FAILURE, b"already exists")
@@ -285,8 +334,21 @@ class SFTPSession(asyncssh.SSHServerSession):
 
                 full = safe_join(JAIL_ROOT, filename)
 
-
                 print(f"[FXP_OPEN] request: {filename!r} -> full: {full}")
+
+                # Determine operation type for authorization
+                if pflags & (PF_WRITE | PF_CREAT | PF_TRUNC):
+                    operation = "write"
+                else:
+                    operation = "read"
+
+                # Authorization check
+                allowed, reason = self._check_authorization(operation, full)
+                if not allowed:
+                    print(f"[AUTHZ DENIED] {reason}")
+                    self._send_status(req_id, SSH_FX_PERMISSION_DENIED, reason.encode())
+                    return
+
                 # Map SFTP pflags to Python open() modes
                 # Default to read-only; adjust based on flags
                 mode = "rb"
@@ -366,6 +428,9 @@ def validate_user_password(username, password):
 
 class Server(asyncssh.SSHServer):
     # Tell AsyncSSH we will do user auth:
+    def __init__(self):
+        self._authenticated_username = None
+
     def begin_auth(self, username):  # called when a new user starts auth
         return True  # start authentication
 
@@ -373,10 +438,15 @@ class Server(asyncssh.SSHServer):
         return True
 
     def validate_password(self, username, password):
-        return validate_user_password(username, password)
+        valid = validate_user_password(username, password)
+        if valid:
+            self._authenticated_username = username
+        return valid
 
     def session_requested(self):
-        return SFTPSession()
+        session = SFTPSession()
+        session.username = self._authenticated_username
+        return session
 
 async def main():
     os.makedirs(JAIL_ROOT, exist_ok=True)
