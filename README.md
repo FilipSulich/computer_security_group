@@ -9,6 +9,7 @@ allowed, reason = authorize(user, operation, path)
 user = user name
 operation must be a supported operation (`realpath`, `stat`, `list`, `read`, `write`, `mkdir`, `remove`) -- map SFTP requests to these operations before calling
 path = path to the file
+example: authorize("alice", "read", "/public/file.txt")
 
 Very important to call the authorize method after jail canonicalization via safe_join
 and before any filesystem call!

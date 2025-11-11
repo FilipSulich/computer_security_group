@@ -199,7 +199,7 @@ class AccessControl:
         user_clearance = self.user_clearances.get(user, "public")
 
         # Find path label (match longest prefix for most specific match)
-        path_label = "public"
+        path_label = "confidential"
         best_match_len = 0
 
         for prefix, label in self.path_labels.items():
