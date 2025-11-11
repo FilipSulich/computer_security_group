@@ -123,7 +123,7 @@ DENIED - other has no read bit (0o004 not set)
 ## MAC (Mandatory Access Control)
 
 ### How it works
-Users have clearance levels, files have classification labels. File with no specified classification assumed to be confidential. User with no clearence assumed to be public, e.i no information about file or user -> be as secure as possible.
+Users have clearance levels, files have classification labels. File with no specified classification assumed to be confidential. User with no clearence assumed to be public, i.e. no information about file or user -> be as secure as possible.
 
 **Rules:**
 - **No read up:** Can't read files above your clearance
