@@ -123,7 +123,7 @@ class AccessControl:
         allowed = dac_allowed and mac_allowed and rbac_allowed
         
         if not allowed:
-            reason = f"DAC: {dac_reason}, MAC: {mac_reason}, RBAC: {rbac_reason}"
+            reason = f"DAC: {dac_reason} | MAC: {mac_reason} | RBAC: {rbac_reason}"
         else:
             reason = "Allowed by all policies"
         
@@ -147,7 +147,7 @@ class AccessControl:
 
         # If no match found, deny by default
         if not best_match:
-            return False, "DAC: no matching rule for path"
+            return False, "DENY, no matching rule for path"
 
         rule = self.dac_rules[best_match]
         owner = rule['owner']
@@ -165,34 +165,34 @@ class AccessControl:
             # User is owner - check owner bits (rwx-------)
             if normalized_op == 'read':
                 if mode & 0o400:  # Owner read bit
-                    return True, f"DAC: owner read allowed on {best_match}"
+                    return True, f"ALLOW"
             elif normalized_op in ['write', 'delete']:
                 if mode & 0o200:  # Owner write bit
-                    return True, f"DAC: owner write allowed on {best_match}"
+                    return True, f"ALLOW"
             # Owner permissions don't allow this operation
-            return False, f"DAC: owner lacks permission on {best_match} (mode={oct(mode)})"
+            return False, f"DENY, owner lacks permission on {best_match} (mode={oct(mode)})"
 
         elif group in user_groups:
             # User is in the file's group - check group bits (---rwx---)
             if normalized_op == 'read':
                 if mode & 0o040:  # Group read bit
-                    return True, f"DAC: group '{group}' read allowed on {best_match}"
+                    return True, f"ALLOW"
             elif normalized_op in ['write', 'delete']:
                 if mode & 0o020:  # Group write bit
-                    return True, f"DAC: group '{group}' write allowed on {best_match}"
+                    return True, f"ALLOW"
             # Group permissions don't allow this operation
-            return False, f"DAC: group '{group}' lacks permission on {best_match} (mode={oct(mode)})"
+            return False, f"DENY, group '{group}' lacks permission on {best_match} (mode={oct(mode)})"
 
         else:
             # User is neither owner nor in group - check other bits (------rwx)
             if normalized_op == 'read':
                 if mode & 0o004:  # Other read bit
-                    return True, f"DAC: other read allowed on {best_match}"
+                    return True, f"ALLOW"
             elif normalized_op in ['write', 'delete']:
                 if mode & 0o002:  # Other write bit
-                    return True, f"DAC: other write allowed on {best_match}"
+                    return True, f"ALLOW"
             # Other permissions don't allow this operation
-            return False, f"DAC: other lacks permission on {best_match} (mode={oct(mode)})"
+            return False, f"DENY, other lacks permission on {best_match} (mode={oct(mode)})"
     
     def check_mac(self, user, operation, path):
         """Mandatory Access Control"""
@@ -217,14 +217,14 @@ class AccessControl:
         # No read up
         if normalized_op == 'read':
             if user_level < resource_level:
-                return False, f"MAC: no read up ({user_clearance} < {path_label})"
+                return False, f"DENY, no read up ({user_clearance} < {path_label})"
 
         # No write down
         if normalized_op in ['write', 'delete']:
             if user_level > resource_level:
-                return False, f"MAC: no write down ({user_clearance} > {path_label})"
+                return False, f"DENY, no write down ({user_clearance} > {path_label})"
 
-        return True, f"MAC: user clearance \"{user_clearance}\" allows \"{operation}\" in \"{path_label}\" files"
+        return True, f"ALLOW"
     
     def check_rbac(self, user, operation, path):
         """Role-Based Access Control"""
@@ -256,14 +256,14 @@ class AccessControl:
 
         # Check if we found a match and if the operation is allowed
         if best_match and normalized_op in best_allowed_ops:
-            return True, f"RBAC: role {best_role} grants {operation} ({normalized_op}) on {best_match}"
+            return True, f"ALLOW"
 
-        return False, "RBAC: no matching role permission"
+        return False, "DENY, no matching role permission"
     
     def audit(self, user, operation, path, allowed, reason):
         """Write audit log"""
         record = {
-            "timestamp": datetime.utcnow().isoformat(),
+            "timestamp": datetime.now().isoformat(),
             "user": user,
             "operation": operation,
             "path": path,

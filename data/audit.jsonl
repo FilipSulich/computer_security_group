@@ -1,0 +1,1 @@
+{"timestamp": "2025-11-11T16:52:51.444880", "user": "alice", "operation": "write", "path": "/public/file.txt", "allowed": false, "reason": "DAC: DENY, no matching rule for path | MAC: DENY, no write down (internal > public) | RBAC: ALLOW"}
