@@ -1,0 +1,2 @@
+role,resource,read,write,delete
+intern,/public,yes,yes,yes

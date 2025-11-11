@@ -1,0 +1,8 @@
+[
+  {
+    "username": "alice",
+    "salt": "base64_encoded_salt",
+    "password_hash": "base64_encoded_hash",
+    "n": 16384, "r": 8, "p": 1, "dklen": 32
+  }
+]
