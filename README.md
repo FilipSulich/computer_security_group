@@ -4,7 +4,7 @@ To use the authorization method:
 ```python
 import AccessControl from policy.py
 ACCESS_CONTROL = AccessControl()
-allowed, reason = authorize(user, operation, path)
+allowed, audit_log = authorize(user, operation, path)
 ```
 user = user name
 operation must be a supported operation (`realpath`, `stat`, `list`, `read`, `write`, `mkdir`, `remove`) -- map SFTP requests to these operations before calling
