@@ -1,5 +1,10 @@
 import sys, os
 import pytest
+from datetime import datetime, timedelta
+
+# pip install pytest
+# to run: pytest tests/policy_tests.py
+
 
 # Change to server directory so ../data/ paths work correctly
 server_dir = os.path.join(os.path.dirname(__file__), '..', 'server')
@@ -131,11 +136,13 @@ def test_rbac_analyst_no_permissions_for_admin(ac):
 
 def test_rbac_full_permission_for_admin(ac):
     """Admin and analyst grants full access to both admin and project"""
+    #check access for admin, requires admin role
     assert ac.check_rbac('annie', 'read', '/confidential/admin')[0]
     assert ac.check_rbac('annie', 'write', '/confidential/admin')[0]
     assert ac.check_rbac('annie', 'mkdir', '/confidential/admin')[0]
     assert ac.check_rbac('annie', 'delete', '/confidential/admin')[0]
 
+    #chekc access for project, requires analyst role
     assert ac.check_rbac('annie', 'read', '/internal/project')[0]
     assert ac.check_rbac('annie', 'write', '/internal/project')[0]
     assert ac.check_rbac('annie', 'mkdir', '/internal/project')[0]
@@ -144,17 +151,22 @@ def test_rbac_full_permission_for_admin(ac):
 
 #COMPOSITE TESTS
 def test_composite_test_allow_by_all(ac):
+    """If user is allowed an operation by dac,mac and rbac, system gives permission"""
     assert ac.authorize('annie', 'read', '/confidential/admin')[0]
     assert ac.authorize('annie', 'write', '/confidential/admin')[0]
 
 def test_composite_test_deny_by_all(ac):
+    """If user is denied by dac,mac,rbac, system denies access"""
     assert not ac.authorize('alice', 'read', '/confidential/admin')[0]
     assert not ac.authorize('alice', 'write', '/confidential/admin')[0]
 
 def test_composite_test_deny_dac_only(ac):
+    """If user is denied by dac, but allowed by mac,rbac, system denies access"""
+    #check if system denies access
     assert not ac.authorize('james', 'read', '/public/reports')[0]
     assert not ac.authorize('james', 'write', '/public/reports')[0]
 
+    #check individual methods ( should return: dac: false, mac: true, rbac: true)
     assert not ac.check_dac('james', 'read', '/public/reports')[0]
     assert not ac.check_dac('james', 'write', '/public/reports')[0]
     assert ac.check_mac('james', 'read', '/public/reports')[0]
@@ -163,9 +175,12 @@ def test_composite_test_deny_dac_only(ac):
     assert ac.check_rbac('james', 'write', '/public/reports')[0]
 
 def test_composite_test_deny_mac_only(ac):
-    #assert not ac.authorize('alice', 'read', '/confidential/text')[0]
-    #assert not ac.authorize('alice', 'write', '/confidential/text')[0]
+    """If user is denied by mac, but allowed by dac,rbac, system denies access"""
+    # check if system denies access
+    assert not ac.authorize('alice', 'read', '/confidential/text')[0]
+    assert not ac.authorize('alice', 'write', '/confidential/text')[0]
 
+    # check individual methods (should return: dac: true, mac: false, rbac: true)
     assert ac.check_dac('alice', 'read', '/confidential/text')[0]
     assert ac.check_dac('alice', 'write', '/confidential/text')[0]
     assert not ac.check_mac('alice', 'read', '/confidential/text')[0]
@@ -174,9 +189,12 @@ def test_composite_test_deny_mac_only(ac):
     assert ac.check_rbac('alice', 'write', '/confidential/text')[0]
 
 def test_composite_test_deny_rbac_only(ac):
+    """If user is denied by rbac, but allowed by dac,mac, system denies access"""
+    # check if system denies access
     assert not ac.authorize('annie', 'read', '/confidential/text')[0]
     assert not ac.authorize('annie', 'write', '/confidential/text')[0]
 
+    # check individual methods (should return: dac: true, mac: true, rbac: false)
     assert ac.check_dac('annie', 'read', '/confidential/text')[0]
     assert ac.check_dac('annie', 'write', '/confidential/text')[0]
     assert ac.check_mac('annie', 'read', '/confidential/text')[0]
@@ -185,7 +203,60 @@ def test_composite_test_deny_rbac_only(ac):
     assert not ac.check_rbac('annie', 'write', '/confidential/text')[0]
 
 #AUDIT ASSERTION TESTS:
+def test_audit_allowed_action(ac):
+    """Verify audit record for an allowed operation."""
+    #input for an allowed operation (alice (owner) reads public file)
+    user = 'alice'
+    operation = 'read'
+    path = '/public/reports'
+    expected_reason = 'Allowed by all policies'
 
+    decision, record = ac.authorize(user, operation, path)
 
-# pip install pytest
-# to run: pytest tests/policy_tests.py
+    #check if decision is allowed by system
+    assert decision is True
+
+    #check if audit fields match
+    assert record['user'] == user
+    assert record['operation'] == operation
+    assert record['path'] == path
+    assert record['allowed'] is True
+    assert record['reason'] == expected_reason
+
+def test_audit_timestamp(ac):
+    """Verify audit timestamp, both format and time range."""
+    #save start and end time of call to authorize
+    start_time = datetime.now()
+    record = ac.authorize('alice', 'read', '/public/reports')[1]
+    end_time = datetime.now()
+
+    #check if audit timestamp has correct format
+    try:
+        logged_time = datetime.fromisoformat(record['timestamp'])
+    except ValueError as e:
+        pytest.fail(f"Timestamp is not in valid ISO 8601 format: {e}")
+
+    #check if audit timestamp falls within the range of the start/end time of call to authorize
+    assert logged_time >= start_time - timedelta(milliseconds=50)
+    assert logged_time <= end_time + timedelta(milliseconds=50)
+
+def test_audit_denied_action(ac):
+    """Verify audit record for a denied operation."""
+
+    #input for an allowed operation (james (other) reads public file with no read/write for others)
+    user = 'james'
+    operation = 'read'
+    path = '/public/reports'
+    expected_reason = 'DAC: DENY, other lacks permission on /public/reports (mode=0o741) | MAC: ALLOW | RBAC: ALLOW'
+
+    decision, record = ac.authorize(user, operation, path)
+
+    #check if access is denied
+    assert decision is False
+
+    #check if audit fields match
+    assert record['user'] == user
+    assert record['operation'] == operation
+    assert record['path'] == path
+    assert record['allowed'] is False
+    assert record['reason'] == expected_reason
