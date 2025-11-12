@@ -1,2 +1,4 @@
 role,resource,read,write,delete
-intern,/public,yes,yes,yes
+intern,/project,yes,no,no
+analyst,/project,yes,yes,yes
+admin,/admin,yes,yes,yes

@@ -103,5 +103,46 @@ def test_mac_confidential_user_no_write_down(ac):
     assert not ac.check_mac('annie', 'write', '/internal/file.txt')[0]
     assert ac.check_mac('annie', 'write', '/confidential/file.txt')[0]
 
+#RBAC:
+#alice = intern, only read project and no access admin file
+#james = analyst, read/write/delete/mkdir project and no access admin file
+#alice = admin and analyst, read/write/delete/mkdir project and read/write/delete admin file
+
+def test_rbac_role_not_full_permissions(ac):
+    """Intern can read, but not write or delete /project"""
+    assert ac.check_rbac('alice', 'read', '/project')[0]
+    assert not ac.check_rbac('alice', 'mkdir', '/project')[0]
+    assert not ac.check_rbac('alice', 'write', '/project')[0]
+    assert not ac.check_rbac('alice', 'delete', '/project')[0]
+
+def test_rbac_role_full_permissions(ac):
+    """Analyst can read,write and delete /project"""
+    assert ac.check_rbac('james', 'read', '/project')[0]
+    assert ac.check_rbac('james', 'write', '/project')[0]
+    assert ac.check_rbac('james', 'mkdir', '/project')[0]
+    assert ac.check_rbac('james', 'delete', '/project')[0]
+
+def test_rbac_analyst_no_permissions_for_admin(ac):
+    """Analyst alone does not have access to admin"""
+    assert not ac.check_rbac('james', 'read', '/admin')[0]
+    assert not ac.check_rbac('james', 'write', '/admin')[0]
+    assert not ac.check_rbac('james', 'mkdir', '/admin')[0]
+    assert not ac.check_rbac('james', 'delete', '/admin')[0]
+
+def test_rbac_full_permission_for_admin(ac):
+    """Admin and analyst grants full access to both admin and project"""
+    assert ac.check_rbac('annie', 'read', '/admin')[0]
+    assert ac.check_rbac('annie', 'write', '/admin')[0]
+    assert ac.check_rbac('annie', 'mkdir', '/admin')[0]
+    assert ac.check_rbac('annie', 'delete', '/admin')[0]
+
+    assert ac.check_rbac('annie', 'read', '/project')[0]
+    assert ac.check_rbac('annie', 'write', '/project')[0]
+    assert ac.check_rbac('annie', 'mkdir', '/project')[0]
+    assert ac.check_rbac('annie', 'delete', '/project')[0]
+
+
+
+
 # pip install pytest
 # to run: pytest tests/policy_tests.py
