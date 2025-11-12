@@ -11,9 +11,10 @@ Our SFTP server uses three security layers: DAC, MAC, and RBAC. All three must a
 ## Operations
 
 We support these SFTP commands:
-- **Read operations:** `realpath`, `stat`, `list`, `read`
+- **Read operations:** `realpath`, `read`
 - **Write operations:** `write`, `mkdir`
 - **Delete operations:** `remove` (`remove` classified as Write for DAC and MAC)
+- **Execute operations:** `stat`, `list` (classified as Read for MAC and RBAC))
 
 ## Path 
 For any path the authorization method looks for longest match in each system.
@@ -60,17 +61,22 @@ path,owner,group,mode
 
 ### Permission bits
 ```
-Mode 0o640 = rw-r-----
+Mode 0o740 = rwxr-----
              │││││││││
-             ││││││││└─ Other write  (0o002)
-             │││││││└── Other read   (0o004)
-             ││││││└─── Group write  (0o020)
-             │││││└──── Group read   (0o040)
-             ││││└───── Owner write  (0o200)
-             │││└────── Owner read   (0o400)
-```
+             ││││││││└─ Other execute  (0o001)
+             │││││││└── Other write    (0o002)
+             ││││││└─── Other read     (0o004)
+             │││││└──── Group execute  (0o010)
+             ││││└───── Group write    (0o020)
+             │││└────── Group read     (0o040)
+             ││└─────── Owner execute  (0o100)
+             │└──────── Owner write    (0o200)
+             └───────── Owner read     (0o400)
+```        
 
-Read operations need read bit (4), write/delete need write bit (2).
+Read operations need read bit (4), write/delete need write bit (2), stat needs execute bit (1).
+Technically, list is allowed with only the read bit set and without the execute bit, but it won't function correctly. 
+So in our system, both the read and execute bits are required for list to be permitted (5).
 
 ### Permission check order
 1. If you're the owner → check owner bits
