@@ -17,7 +17,7 @@ OPERATION_MAP = {
 class AccessControl:
     def __init__(self):
         self.load_policies()
-        self.audit_file = open("../data/audit.jsonl", "a")
+        self.audit_file = open("../data/audit_policy.jsonl", "a")
 
     def load_policies(self):
         """Load all policy files with error handling"""

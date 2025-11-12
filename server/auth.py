@@ -34,7 +34,7 @@ MAX_FAILED_ATTEMPTS = 5
 LOCKOUT_DURATION = 300  # 5 minutes in seconds
 RATE_LIMIT_WINDOW = 60  # 1 minute
 MAX_ATTEMPTS_PER_WINDOW = 10
-AUDIT_LOG_PATH = './server/audit.jsonl'
+AUDIT_LOG_PATH = './server/audit_auth.jsonl'
 
 
 # In-memory tracking (in production, use Redis or database)
@@ -178,7 +178,7 @@ def record_successful_attempt(username: str):
         del _lockout_until[username]
 
 
-# logs authentication events to audit.jsonl
+# logs authentication events to audit_auth.jsonl
 def audit_log(username: str, event_type: str, success: bool, reason: str = ''):
 
     try:
