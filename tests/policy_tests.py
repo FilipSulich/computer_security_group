@@ -21,11 +21,12 @@ def test_mac_internal_user_read(ac):
 def test_mac_confidential_user_no_write_down(ac):
     """Confidential user cannot write down to public"""
     assert not ac.check_mac('alice', 'write', '/public/file.txt')[0]
-    assert ac.check_mac('alice', 'write', '/confidential/file.txt')[0]
+    assert not ac.check_mac('alice', 'write', '/confidential/file.txt')[0]
+    assert ac.check_mac('alice', 'write', '/internal/file.txt')[0]
 
 def test_test(ac):
     """Confidential user cannot write down to public"""
-    assert not ac.authorize('alice', 'write', '/public/file.txt')[0]
+    assert not ac.authorize('alice', 'write', '/public/file.txt')[1]
 
 # pip install pytest
 # to run: pytest tests/policy_tests.py

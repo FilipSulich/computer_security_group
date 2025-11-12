@@ -128,9 +128,9 @@ class AccessControl:
             reason = "Allowed by all policies"
         
         # Audit
-        self.audit(user, operation, path, allowed, reason)
+        record = self.audit(user, operation, path, allowed, reason)
         
-        return allowed, reason
+        return allowed, record
     
     def check_dac(self, user, operation, path):
         """Discretionary Access Control using dac_owners.csv with owner/group/other"""
@@ -272,3 +272,4 @@ class AccessControl:
         }
         self.audit_file.write(json.dumps(record) + "\n")
         self.audit_file.flush()
+        return record
