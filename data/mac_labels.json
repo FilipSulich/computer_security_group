@@ -1,9 +1,9 @@
 {
   "users": {
     "alice": "internal",
-    "bob": "internal",
+    "bob": "public",
     "annie": "confidential",
-    "james": "public"
+    "james": "internal"
   },
   "paths": {
     "/confidential": "confidential",

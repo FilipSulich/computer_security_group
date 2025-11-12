@@ -5,3 +5,4 @@ admin,/confidential/admin,yes,yes,yes
 analyst,/public/reports,yes,yes,yes
 intern,/public/reports,yes,yes,yes
 intern,/confidential/text,yes,yes,yes
+intern,/public/policy,yes,yes,no

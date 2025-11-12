@@ -68,15 +68,15 @@ def test_dac_list_exec_only_no_read(ac):
 
 
 #MAC TESTS:
-#james = public
+#bob = public
 #alice = internal
 #annie = confidential
 
 def test_mac_public_user_read(ac):
     """Public user can read public but not internal/confidential"""
-    assert ac.check_mac('james', 'read', '/public/file.txt')[0]
-    assert not ac.check_mac('james', 'read', '/internal/file.txt')[0]
-    assert not ac.check_mac('james', 'read', '/confidential/secret.txt')[0]
+    assert ac.check_mac('bob', 'read', '/public/file.txt')[0]
+    assert not ac.check_mac('bob', 'read', '/internal/file.txt')[0]
+    assert not ac.check_mac('bob', 'read', '/confidential/secret.txt')[0]
 
 def test_mac_internal_user_read(ac):
     """Internal user can read public/internal but not confidential"""
@@ -92,9 +92,9 @@ def test_mac_confidential_user_read(ac):
 
 def test_mac_public_user_write(ac):
     """Public user can write public but not internal/confidential"""
-    assert ac.check_mac('james', 'write', '/public/file.txt')[0]
-    assert not ac.check_mac('james', 'write', '/internal/file.txt')[0]
-    assert not ac.check_mac('james', 'write', '/confidential/secret.txt')[0]
+    assert ac.check_mac('bob', 'write', '/public/file.txt')[0]
+    assert not ac.check_mac('bob', 'write', '/internal/file.txt')[0]
+    assert not ac.check_mac('bob', 'write', '/confidential/secret.txt')[0]
 
 def test_mac_internal_user_write(ac):
     """Internal user can write internal but not up to confidential or down to public"""
@@ -163,16 +163,16 @@ def test_composite_test_deny_by_all(ac):
 def test_composite_test_deny_dac_only(ac):
     """If user is denied by dac, but allowed by mac,rbac, system denies access"""
     #check if system denies access
-    assert not ac.authorize('james', 'read', '/public/reports')[0]
-    assert not ac.authorize('james', 'write', '/public/reports')[0]
+    assert not ac.authorize('bob', 'read', '/public/policy')[0]
+    assert not ac.authorize('bob', 'write', '/public/policy')[0]
 
     #check individual methods ( should return: dac: false, mac: true, rbac: true)
-    assert not ac.check_dac('james', 'read', '/public/reports')[0]
-    assert not ac.check_dac('james', 'write', '/public/reports')[0]
-    assert ac.check_mac('james', 'read', '/public/reports')[0]
-    assert ac.check_mac('james', 'write', '/public/reports')[0]
-    assert ac.check_rbac('james', 'read', '/public/reports')[0]
-    assert ac.check_rbac('james', 'write', '/public/reports')[0]
+    assert not ac.check_dac('bob', 'read', '/public/policy')[0]
+    assert not ac.check_dac('bob', 'write', '/public/policy')[0]
+    assert ac.check_mac('bob', 'read', '/public/policy')[0]
+    assert ac.check_mac('bob', 'write', '/public/policy')[0]
+    assert ac.check_rbac('bob', 'read', '/public/policy')[0]
+    assert ac.check_rbac('bob', 'write', '/public/policy')[0]
 
 def test_composite_test_deny_mac_only(ac):
     """If user is denied by mac, but allowed by dac,rbac, system denies access"""

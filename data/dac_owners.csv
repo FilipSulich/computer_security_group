@@ -3,3 +3,4 @@ path,owner,group,mode
 /confidential/admin,annie,admins,0o740
 /internal/project,james,analysts,0o760
 /confidential/text,annie,admins,0o777
+/public/policy,annie,admins,0o700
