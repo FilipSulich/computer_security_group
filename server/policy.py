@@ -14,6 +14,16 @@ OPERATION_MAP = {
     'remove': 'delete'
 }
 
+OPERATION_MAP_DAC = {
+    'realpath': 'read',
+    'stat': 'stat',
+    'list': 'list',
+    'read': 'read',
+    'write': 'write',
+    'mkdir': 'write',
+    'remove': 'delete'
+}
+
 class AccessControl:
     def __init__(self):
         self.load_policies()
@@ -157,8 +167,8 @@ class AccessControl:
         # Get user's groups (empty list if user not found)
         user_groups = self.user_groups.get(user, [])
 
-        # Normalize operation using global map
-        normalized_op = OPERATION_MAP.get(operation, operation)
+        # Normalize operation using dac map
+        normalized_op = OPERATION_MAP_DAC.get(operation, operation)
 
         # Check permissions in order: owner -> group -> other
         if user == owner:
@@ -168,6 +178,12 @@ class AccessControl:
                     return True, f"ALLOW"
             elif normalized_op in ['write', 'delete']:
                 if mode & 0o200:  # Owner write bit
+                    return True, f"ALLOW"
+            elif normalized_op == 'stat':
+                if mode & 0o100:  # Owner execute bit
+                    return True, f"ALLOW"
+            elif normalized_op == 'list':
+                if mode & 0o500:  # Owner list bit (requires both read and stat)
                     return True, f"ALLOW"
             # Owner permissions don't allow this operation
             return False, f"DENY, owner lacks permission on {best_match} (mode={oct(mode)})"
@@ -180,6 +196,13 @@ class AccessControl:
             elif normalized_op in ['write', 'delete']:
                 if mode & 0o020:  # Group write bit
                     return True, f"ALLOW"
+            elif normalized_op == 'stat':
+                if mode & 0o010:  # Group execute bit
+                    return True, f"ALLOW"
+            elif normalized_op == 'list':
+                if mode & 0o050:  # Group list bit (requires both read and stat)
+                    return True, f"ALLOW"
+
             # Group permissions don't allow this operation
             return False, f"DENY, group '{group}' lacks permission on {best_match} (mode={oct(mode)})"
 
@@ -190,6 +213,12 @@ class AccessControl:
                     return True, f"ALLOW"
             elif normalized_op in ['write', 'delete']:
                 if mode & 0o002:  # Other write bit
+                    return True, f"ALLOW"
+            elif normalized_op == 'stat':
+                if mode & 0o001:  # Other execute bit
+                    return True, f"ALLOW"
+            elif normalized_op == 'list':
+                if mode & 0o005:  # Other list bit (requires both read and stat)
                     return True, f"ALLOW"
             # Other permissions don't allow this operation
             return False, f"DENY, other lacks permission on {best_match} (mode={oct(mode)})"
