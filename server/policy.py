@@ -221,7 +221,7 @@ class AccessControl:
 
         # No write down
         if normalized_op in ['write', 'delete']:
-            if user_level == resource_level:
+            if user_level != resource_level:
                 return False, f"DENY, no write down ({user_clearance} != {path_label})"
 
         return True, f"ALLOW"
