@@ -213,7 +213,7 @@ DENIED - intern role only has no rights on /data/secret/
 
 **Multiple roles (union):**
 ```
-User: alice, Roles: [analyst, admin]
+User: alice, Roles: [intern, admin]
 File: /data/secret/budget.pdf
 Operation: write
 ALLOWED - admin role grants write (even though intern doesn't)
