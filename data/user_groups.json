@@ -1,5 +1,6 @@
 {
     "alice": ["interns"],
     "bob": ["interns"],
-    "james": ["analysts"]
+    "james": ["analysts"],
+    "annie": ["admins", "analysts"]
 }
