@@ -266,7 +266,7 @@ Final: ✓ ALLOW
 
 ## Audit Logging
 
-Every decision gets logged to `server/audit.jsonl`:
+Every decision gets logged to `data/audit_policy.jsonl`:
 
 ```json
 {
@@ -303,4 +303,4 @@ This shows Bob failed because of MAC (write down violation) even though DAC and 
 - **MAC** = Clearance levels (no read up, no write down)
 - **RBAC** = Role-based permissions (union of all roles)
 - **Decision** = All three must approve
-- **Logging** = Everything logged to audit.jsonl
+- **Logging** = Everything logged to audit_policy.jsonl
