@@ -183,7 +183,7 @@ class AccessControl:
                 if mode & 0o100:  # Owner execute bit
                     return True, f"ALLOW"
             elif normalized_op == 'list':
-                if mode & 0o500:  # Owner list bit (requires both read and stat)
+                if mode & 0o100 and mode & 0o400:  # Owner list bit (requires both read and stat)
                     return True, f"ALLOW"
             # Owner permissions don't allow this operation
             return False, f"DENY, owner lacks permission on {best_match} (mode={oct(mode)})"
@@ -200,7 +200,7 @@ class AccessControl:
                 if mode & 0o010:  # Group execute bit
                     return True, f"ALLOW"
             elif normalized_op == 'list':
-                if mode & 0o050:  # Group list bit (requires both read and stat)
+                if mode & 0o010 and mode & 0o040:  # Group list bit (requires both read and stat)
                     return True, f"ALLOW"
 
             # Group permissions don't allow this operation
@@ -218,7 +218,7 @@ class AccessControl:
                 if mode & 0o001:  # Other execute bit
                     return True, f"ALLOW"
             elif normalized_op == 'list':
-                if mode & 0o005:  # Other list bit (requires both read and stat)
+                if mode & 0o001 and mode & 0o004:  # Other list bit (requires both read and stat)
                     return True, f"ALLOW"
             # Other permissions don't allow this operation
             return False, f"DENY, other lacks permission on {best_match} (mode={oct(mode)})"
