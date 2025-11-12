@@ -4,5 +4,23 @@
     "salt": "base64_encoded_salt",
     "password_hash": "base64_encoded_hash",
     "n": 16384, "r": 8, "p": 1, "dklen": 32
+  },
+  {
+    "username": "annie",
+    "salt": "base64_encoded_salt",
+    "password_hash": "base64_encoded_hash",
+    "n": 16384, "r": 8, "p": 1, "dklen": 32
+  },
+  {
+    "username": "james",
+    "salt": "base64_encoded_salt",
+    "password_hash": "base64_encoded_hash",
+    "n": 16384, "r": 8, "p": 1, "dklen": 32
+  },
+  {
+    "username": "bob",
+    "salt": "base64_encoded_salt",
+    "password_hash": "base64_encoded_hash",
+    "n": 16384, "r": 8, "p": 1, "dklen": 32
   }
 ]
