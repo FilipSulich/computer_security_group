@@ -9,6 +9,7 @@
     "/confidential": "confidential",
     "/internal": "internal",
     "/public": "public"
+    
   },
   "levels": ["public", "internal", "confidential"]
 }

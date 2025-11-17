@@ -8,7 +8,7 @@ logging.basicConfig(
     format="%(asctime)s %(levelname)s: %(message)s"
 )
 
-HOST_KEY_PATH = './ssh_host_ed25519_key'
+HOST_KEY_PATH = '../ssh_host_ed25519_key'
 LISTEN_HOST, LISTEN_PORT = '', 2222
 SFTP_SUBSYSTEM_NAME = 'sftp'
 JAIL_ROOT = os.path.abspath('./sftp_root')
@@ -234,11 +234,18 @@ class SFTPSession(asyncssh.SSHServerSession):
             if not allowed:
                 return self._send_status(req_id, SSH_FX_PERMISSION_DENIED, rec["reason"].encode())
 
-            full = safe_join(JAIL_ROOT, raw)
-            entries = list(os.scandir(full))
-            handle = self.handles.add(DirHandle(entries))
+            try:
+                full = safe_join(JAIL_ROOT, raw)
+                entries = list(os.scandir(full))
+                handle = self.handles.add(DirHandle(entries))
 
-            return self._chan.write(pack_pkt(SSH_FXP_HANDLE, p_u32(req_id) + handle))
+                return self._chan.write(pack_pkt(SSH_FXP_HANDLE, p_u32(req_id) + handle))
+
+            except FileNotFoundError:
+                return self._send_status(req_id, SSH_FX_NO_SUCH_FILE, b"directory not found")
+
+            except PermissionError:
+                return self._send_status(req_id, SSH_FX_PERMISSION_DENIED, b"permission denied")
 
         #READDIR
         if ptype == SSH_FXP_READDIR:
@@ -320,6 +327,7 @@ class SFTPSession(asyncssh.SSHServerSession):
                     return self._send_status(req_id, SSH_FX_FAILURE, b"exists")
 
                 f = open(full, mode)
+                file_handle = FileHandle(f, canon)
 
             except Exception as e:
                 return self._send_status(req_id, SSH_FX_FAILURE, str(e).encode())

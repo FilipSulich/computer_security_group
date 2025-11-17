@@ -1,26 +1,42 @@
 [
   {
     "username": "alice",
-    "salt": "base64_encoded_salt",
-    "password_hash": "base64_encoded_hash",
-    "n": 16384, "r": 8, "p": 1, "dklen": 32
+    "salt": "8FU6fTz6Hqoo89fCysQsBg",
+    "password_hash": "hIaqDR5iGwI36l0sbRmJPo1bDnEJRiNdXZ1qNn2pyQM",
+    "active": true,
+    "n": 16384,
+    "r": 8,
+    "p": 1,
+    "dklen": 32
   },
   {
     "username": "annie",
-    "salt": "base64_encoded_salt",
-    "password_hash": "base64_encoded_hash",
-    "n": 16384, "r": 8, "p": 1, "dklen": 32
+    "salt": "BhKS47jLG3PgmL65LJV/4A",
+    "password_hash": "+eaJj/HsPG+yUdR1T1k13QXUUt/xNgjTriJHx9icXuI",
+    "active": true,
+    "n": 16384,
+    "r": 8,
+    "p": 1,
+    "dklen": 32
   },
   {
     "username": "james",
-    "salt": "base64_encoded_salt",
-    "password_hash": "base64_encoded_hash",
-    "n": 16384, "r": 8, "p": 1, "dklen": 32
+    "salt": "UM5cNQPX8oouskNXljk0KA",
+    "password_hash": "5Y+wjmi5xo2yXyralZzQCYPfjs5C2js/YUJRVsOPBCQ",
+    "active": true,
+    "n": 16384,
+    "r": 8,
+    "p": 1,
+    "dklen": 32
   },
   {
     "username": "bob",
-    "salt": "base64_encoded_salt",
-    "password_hash": "base64_encoded_hash",
-    "n": 16384, "r": 8, "p": 1, "dklen": 32
+    "salt": "kjp2mNKxXo0dY8fBJyrgyQ",
+    "password_hash": "PU5UCVqg5xIMOGOL/k2sopjaW4SEhV51Gzm8ayQ5jU8",
+    "active": true,
+    "n": 16384,
+    "r": 8,
+    "p": 1,
+    "dklen": 32
   }
 ]
