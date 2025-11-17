@@ -18,3 +18,8 @@
 {"timestamp": "2025-11-09T19:39:55.395909Z", "username": "bob", "event": "login", "success": false, "reason": "Account locked (unlocks in 293s)", "source": "auth"}
 {"timestamp": "2025-11-09T19:40:08.063575Z", "username": "alice", "event": "login", "success": true, "reason": "Valid credentials", "source": "auth"}
 {"timestamp": "2025-11-09T19:40:14.243899Z", "username": "pods", "event": "login", "success": false, "reason": "User not found", "source": "auth"}
+{"timestamp": "2025-11-17T13:16:05.815546Z", "username": "alice", "event": "login", "success": false, "reason": "Invalid password", "source": "auth"}
+{"timestamp": "2025-11-17T13:18:27.400885Z", "username": "bob", "event": "login", "success": true, "reason": "Valid credentials", "source": "auth"}
+{"timestamp": "2025-11-17T13:23:56.794076Z", "username": "bob", "event": "login", "success": true, "reason": "Valid credentials", "source": "auth"}
+{"timestamp": "2025-11-17T13:34:57.387575Z", "username": "bob", "event": "login", "success": true, "reason": "Valid credentials", "source": "auth"}
+{"timestamp": "2025-11-17T13:48:29.232249Z", "username": "bob", "event": "login", "success": true, "reason": "Valid credentials", "source": "auth"}

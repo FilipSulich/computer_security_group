@@ -105,7 +105,7 @@ def verify_password(password: str, password_hash: str) -> bool:
         return False
 
 
-# hardcoded user database with 2 users for testing/demo purposes
+# hardcoded user database with 4 users for testing/demo purposes
 USER_DATABASE = {
     'bob': {
         'password_hash': hash_password('test'),
@@ -113,6 +113,14 @@ USER_DATABASE = {
     },
     'alice': {
         'password_hash': hash_password('secure123'),
+        'active': True
+    },
+    'james': {
+        'password_hash': hash_password('analyst123'),
+        'active': True
+    },
+    'annie': {
+        'password_hash': hash_password('admin123'),
         'active': True
     }
 }
@@ -260,8 +268,8 @@ if __name__ == "__main__":
     print("=== Authentication Module Test ===\n")
     print(f"Using: {'Argon2id' if USE_ARGON2 else 'scrypt (fallback)'}")
     print(f"Pepper configured: {'Yes' if PEPPER != 'change-this-secret-pepper-in-production' else 'No (using default!)'}\n")
-    print("Available users: bob, alice")
-    print("Passwords: bob=test, alice=secure123\n")
+    print("Available users: bob, alice, james, annie")
+    print("Passwords: bob=test, alice=secure123, james=analyst123, annie=admin123\n")
     print("Type 'quit' or 'exit' to stop\n")
     
     # Interactive testing loop

@@ -263,3 +263,41 @@
 {"timestamp": "2025-11-12T22:28:42.205755", "user": "alice", "operation": "read", "path": "/public/reports", "allowed": true, "reason": "Allowed by all policies"}
 {"timestamp": "2025-11-12T22:28:42.206136", "user": "alice", "operation": "read", "path": "/public/reports", "allowed": true, "reason": "Allowed by all policies"}
 {"timestamp": "2025-11-12T22:28:42.206528", "user": "james", "operation": "read", "path": "/public/reports", "allowed": false, "reason": "DAC: DENY, other lacks permission on /public/reports (mode=0o741) | MAC: ALLOW | RBAC: ALLOW"}
+{"timestamp": "2025-11-17T14:50:41.483493", "user": "bob", "operation": "realpath", "path": "/", "allowed": false, "reason": "DAC: DENY, no matching rule for path | MAC: DENY, no read up (public < confidential) | RBAC: DENY, no matching role permission"}
+{"timestamp": "2025-11-17T17:39:16.828621", "user": "bob", "operation": "realpath", "path": "/", "allowed": false, "reason": "DAC: DENY, no matching rule for path | MAC: DENY, no read up (public < confidential) | RBAC: DENY, no matching role permission"}
+{"timestamp": "2025-11-17T17:40:13.750949", "user": "bob", "operation": "list", "path": "/", "allowed": false, "reason": "DAC: DENY, no matching rule for path | MAC: DENY, no read up (public < confidential) | RBAC: DENY, no matching role permission"}
+{"timestamp": "2025-11-17T18:59:49.527666", "user": "bob", "operation": "stat", "path": "/public", "allowed": false, "reason": "DAC: DENY, no matching rule for path | MAC: ALLOW | RBAC: DENY, no matching role permission"}
+{"timestamp": "2025-11-17T18:59:58.423102", "user": "bob", "operation": "stat", "path": "/public", "allowed": false, "reason": "DAC: DENY, no matching rule for path | MAC: ALLOW | RBAC: DENY, no matching role permission"}
+{"timestamp": "2025-11-17T19:00:04.107216", "user": "bob", "operation": "stat", "path": "/public/reports", "allowed": false, "reason": "DAC: DENY, group 'interns' lacks permission on /public/reports (mode=0o741) | MAC: ALLOW | RBAC: ALLOW"}
+{"timestamp": "2025-11-17T19:02:18.193091", "user": "alice", "operation": "stat", "path": "/public/reports", "allowed": true, "reason": "Allowed by all policies"}
+{"timestamp": "2025-11-17T19:02:25.781965", "user": "alice", "operation": "stat", "path": "/public/reports", "allowed": true, "reason": "Allowed by all policies"}
+{"timestamp": "2025-11-17T19:02:53.067673", "user": "alice", "operation": "realpath", "path": "/", "allowed": false, "reason": "DAC: DENY, no matching rule for path | MAC: DENY, no read up (internal < confidential) | RBAC: DENY, no matching role permission"}
+{"timestamp": "2025-11-17T19:03:57.311896", "user": "bob", "operation": "write", "path": "/demo/README.md", "allowed": false, "reason": "DAC: DENY, no matching rule for path | MAC: DENY, no write down (public != confidential) | RBAC: DENY, no matching role permission"}
+{"timestamp": "2025-11-17T19:05:06.219343", "user": "alice", "operation": "write", "path": "/confidential/text", "allowed": false, "reason": "DAC: ALLOW | MAC: DENY, no write down (internal != confidential) | RBAC: ALLOW"}
+{"timestamp": "2025-11-17T19:06:34.796057", "user": "alice", "operation": "read", "path": "/public/reports", "allowed": true, "reason": "Allowed by all policies"}
+{"timestamp": "2025-11-17T19:35:21.727595", "user": "bob", "operation": "realpath", "path": "/", "allowed": false, "reason": "DAC: DENY, no matching rule for path | MAC: DENY, no read up (public < confidential) | RBAC: DENY, no matching role permission"}
+{"timestamp": "2025-11-17T19:40:29.755406", "user": "alice", "operation": "write", "path": "/public/reports/README.md", "allowed": false, "reason": "DAC: ALLOW | MAC: DENY, no write down (internal != public) | RBAC: ALLOW"}
+{"timestamp": "2025-11-17T19:44:19.691792", "user": "alice", "operation": "realpath", "path": "/", "allowed": false, "reason": "DAC: DENY, no matching rule for path | MAC: DENY, no read up (internal < confidential) | RBAC: DENY, no matching role permission"}
+{"timestamp": "2025-11-17T19:47:03.811390", "user": "alice", "operation": "realpath", "path": "/", "allowed": true, "reason": "Allowed by all policies"}
+{"timestamp": "2025-11-17T19:47:12.436339", "user": "alice", "operation": "list", "path": "/", "allowed": true, "reason": "Allowed by all policies"}
+{"timestamp": "2025-11-17T19:47:17.430267", "user": "alice", "operation": "list", "path": "/public", "allowed": true, "reason": "Allowed by all policies"}
+{"timestamp": "2025-11-17T19:52:14.149925", "user": "alice", "operation": "realpath", "path": "/", "allowed": true, "reason": "Allowed by all policies"}
+{"timestamp": "2025-11-17T19:52:18.545541", "user": "alice", "operation": "list", "path": "/", "allowed": true, "reason": "Allowed by all policies"}
+{"timestamp": "2025-11-17T19:53:42.398347", "user": "alice", "operation": "list", "path": "/public", "allowed": true, "reason": "Allowed by all policies"}
+{"timestamp": "2025-11-17T19:53:50.887696", "user": "alice", "operation": "list", "path": "/public/reports", "allowed": true, "reason": "Allowed by all policies"}
+{"timestamp": "2025-11-17T19:53:53.977270", "user": "alice", "operation": "list", "path": "/", "allowed": true, "reason": "Allowed by all policies"}
+{"timestamp": "2025-11-17T19:54:40.043161", "user": "alice", "operation": "mkdir", "path": "/public/test123", "allowed": false, "reason": "DAC: DENY, other lacks permission on /public (mode=0o755) | MAC: DENY, no write down (internal != public) | RBAC: DENY, no matching role permission"}
+{"timestamp": "2025-11-17T19:56:02.665823", "user": "alice", "operation": "realpath", "path": "/", "allowed": true, "reason": "Allowed by all policies"}
+{"timestamp": "2025-11-17T19:56:06.340928", "user": "alice", "operation": "list", "path": "/public", "allowed": true, "reason": "Allowed by all policies"}
+{"timestamp": "2025-11-17T19:56:10.600272", "user": "alice", "operation": "list", "path": "/public/reports", "allowed": true, "reason": "Allowed by all policies"}
+{"timestamp": "2025-11-17T20:01:42.225885", "user": "alice", "operation": "mkdir", "path": "/public/reports", "allowed": false, "reason": "DAC: ALLOW | MAC: DENY, no write down (internal != public) | RBAC: ALLOW"}
+{"timestamp": "2025-11-17T20:02:29.611242", "user": "alice", "operation": "write", "path": "/public/reports/alice_test.txt", "allowed": false, "reason": "DAC: ALLOW | MAC: DENY, no write down (internal != public) | RBAC: ALLOW"}
+{"timestamp": "2025-11-17T20:02:51.046121", "user": "alice", "operation": "stat", "path": "/public/reports", "allowed": true, "reason": "Allowed by all policies"}
+{"timestamp": "2025-11-17T20:03:44.719908", "user": "alice", "operation": "write", "path": "/internal/project/alice_test.txt", "allowed": false, "reason": "DAC: DENY, other lacks permission on /internal/project (mode=0o760) | MAC: ALLOW | RBAC: DENY, no matching role permission"}
+{"timestamp": "2025-11-17T20:04:03.571053", "user": "alice", "operation": "list", "path": "/public/resources", "allowed": true, "reason": "Allowed by all policies"}
+{"timestamp": "2025-11-17T20:04:16.907889", "user": "alice", "operation": "list", "path": "/public/reports", "allowed": true, "reason": "Allowed by all policies"}
+{"timestamp": "2025-11-17T20:05:19.008357", "user": "alice", "operation": "write", "path": "/public/policy/alice_test.txt", "allowed": false, "reason": "DAC: DENY, other lacks permission on /public/policy (mode=0o700) | MAC: DENY, no write down (internal != public) | RBAC: ALLOW"}
+{"timestamp": "2025-11-17T20:17:03.583812", "user": "bob", "operation": "list", "path": "/public/reports", "allowed": false, "reason": "DAC: DENY, group 'interns' lacks permission on /public/reports (mode=0o741) | MAC: ALLOW | RBAC: ALLOW"}
+{"timestamp": "2025-11-17T20:17:48.223673", "user": "bob", "operation": "list", "path": "/", "allowed": true, "reason": "Allowed by all policies"}
+{"timestamp": "2025-11-17T20:17:51.991789", "user": "bob", "operation": "list", "path": "/public", "allowed": true, "reason": "Allowed by all policies"}
+{"timestamp": "2025-11-17T20:18:11.431256", "user": "bob", "operation": "list", "path": "/public/reports", "allowed": false, "reason": "DAC: DENY, group 'interns' lacks permission on /public/reports (mode=0o741) | MAC: ALLOW | RBAC: ALLOW"}
