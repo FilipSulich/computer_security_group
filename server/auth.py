@@ -34,7 +34,7 @@ MAX_FAILED_ATTEMPTS = 5
 LOCKOUT_DURATION = 300  # 5 minutes in seconds
 RATE_LIMIT_WINDOW = 60  # 1 minute
 MAX_ATTEMPTS_PER_WINDOW = 10
-AUDIT_LOG_PATH = './server/audit_auth.jsonl'
+AUDIT_LOG_PATH = os.path.join(os.path.dirname(__file__), 'audit_auth.jsonl')
 
 
 # In-memory tracking (in production, use Redis or database)
@@ -105,34 +105,37 @@ def verify_password(password: str, password_hash: str) -> bool:
         return False
 
 
-# hardcoded user database with 4 users for testing/demo purposes
-USER_DATABASE = {
-    'bob': {
-        'password_hash': hash_password('test'),
-        'active': True
-    },
-    'alice': {
-        'password_hash': hash_password('secure123'),
-        'active': True
-    },
-    'james': {
-        'password_hash': hash_password('analyst123'),
-        'active': True
-    },
-    'annie': {
-        'password_hash': hash_password('admin123'),
-        'active': True
-    }
-}
+# Path to user database file
+USER_DATABASE_PATH = os.path.join(os.path.dirname(__file__), '..', 'data', 'users.json')
 
+
+def load_users() -> list:
+    """Load users from JSON file (returns array)"""
+    try:
+        with open(USER_DATABASE_PATH, 'r') as f:
+            return json.load(f)
+    except FileNotFoundError:
+        print(f"Warning: User database not found at {USER_DATABASE_PATH}")
+        return []
+    except json.JSONDecodeError as e:
+        print(f"Error: Invalid JSON in user database: {e}")
+        return []
+
+def save_users(users: list):
+    """Save users to JSON file (saves as array)"""
+    os.makedirs(os.path.dirname(USER_DATABASE_PATH), exist_ok=True)
+    with open(USER_DATABASE_PATH, 'w') as f:
+        json.dump(users, f, indent=2)
 
 def get_user(username: str) -> Optional[dict]:
-    """Retrieve user from hardcoded database"""
-    return USER_DATABASE.get(username)
-
+    """Retrieve user from JSON database (searches array)"""
+    users = load_users()
+    for user in users:
+        if user.get('username') == username:
+            return user
+    return None
 
 # checks if user has exceeded rate limit
-
 def check_rate_limit(username: str) -> bool:
 
     now = time.time()
@@ -151,9 +154,7 @@ def check_rate_limit(username: str) -> bool:
     _rate_limit_tracker[username].append(now)
     return True
 
-
 # checks if account is locked out
-
 def is_locked_out(username: str) -> bool:
     """Check if account is locked out"""
     if username in _lockout_until:
@@ -166,7 +167,6 @@ def is_locked_out(username: str) -> bool:
     return False
 
 # records a failed login attempt
-
 def record_failed_attempt(username: str):
 
     _failed_attempts[username] += 1
@@ -248,7 +248,17 @@ def validate_user_password(username: str, password: str):
         return False
     
     # 5 - Verify password
-    password_hash = user['password_hash']
+    # Reconstruct full hash from stored salt and hash parts
+    salt = user.get('salt', '')
+    hash_part = user.get('password_hash', '')
+
+    if USE_ARGON2:
+        # Reconstruct Argon2 format: $argon2id$v=19$m=65536,t=2,p=1$<salt>$<hash>
+        password_hash = f"$argon2id$v=19$m=65536,t=2,p=1${salt}${hash_part}"
+    else:
+        # Reconstruct scrypt format: scrypt$<salt>$<hash>
+        password_hash = f"scrypt${salt}${hash_part}"
+
     if verify_password(password, password_hash):
         # Success!
         record_successful_attempt(username)
@@ -268,8 +278,7 @@ if __name__ == "__main__":
     print("=== Authentication Module Test ===\n")
     print(f"Using: {'Argon2id' if USE_ARGON2 else 'scrypt (fallback)'}")
     print(f"Pepper configured: {'Yes' if PEPPER != 'change-this-secret-pepper-in-production' else 'No (using default!)'}\n")
-    print("Available users: bob, alice, james, annie")
-    print("Passwords: bob=test, alice=secure123, james=analyst123, annie=admin123\n")
+    print("Available users: bob, alice, james, annie") 
     print("Type 'quit' or 'exit' to stop\n")
     
     # Interactive testing loop
@@ -303,7 +312,7 @@ if __name__ == "__main__":
                 print(f"✗ Authentication FAILED for '{username}'")
                 
                 # Show helpful info
-                if username in USER_DATABASE:
+                if get_user(username):
                     if is_locked_out(username):
                         remaining = int(_lockout_until.get(username, 0) - time.time())
                         print(f"  ⚠ Account is LOCKED OUT (unlocks in {remaining}s)")

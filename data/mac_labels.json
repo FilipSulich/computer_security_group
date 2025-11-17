@@ -1,16 +1,15 @@
 {
   "users": {
     "alice": "internal",
-    "bob": "internal",
+    "bob": "public",
     "annie": "confidential",
     "james": "internal"
   },
   "paths": {
-    "/": "public",
     "/confidential": "confidential",
     "/internal": "internal",
-    "/public": "public",
-    "/public/reports": "internal"
+    "/public": "public"
+    
   },
   "levels": ["public", "internal", "confidential"]
 }
