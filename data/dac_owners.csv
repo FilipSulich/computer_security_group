@@ -1,6 +1,6 @@
 path,owner,group,mode
 /,root,root,0o755
-/public/reports,alice,interns,0o741
+/public/reports,alice,interns,0o751
 /confidential/admin,annie,admins,0o740
 /internal/project,james,analysts,0o760
 /confidential/text,annie,admins,0o777

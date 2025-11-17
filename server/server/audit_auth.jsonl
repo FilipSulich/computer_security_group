@@ -15,3 +15,13 @@
 {"timestamp": "2025-11-17T18:51:56.561259Z", "username": "alice", "event": "login", "success": true, "reason": "Valid credentials", "source": "auth"}
 {"timestamp": "2025-11-17T18:55:51.062915Z", "username": "alice", "event": "login", "success": true, "reason": "Valid credentials", "source": "auth"}
 {"timestamp": "2025-11-17T19:16:57.036763Z", "username": "bob", "event": "login", "success": true, "reason": "Valid credentials", "source": "auth"}
+{"timestamp": "2025-11-17T19:23:26.506526Z", "username": "james", "event": "login", "success": true, "reason": "Valid credentials", "source": "auth"}
+{"timestamp": "2025-11-17T19:25:10.947616Z", "username": "james", "event": "login", "success": true, "reason": "Valid credentials", "source": "auth"}
+{"timestamp": "2025-11-17T19:29:55.036418Z", "username": "james", "event": "login", "success": false, "reason": "Invalid password", "source": "auth"}
+{"timestamp": "2025-11-17T19:30:02.339917Z", "username": "james", "event": "login", "success": true, "reason": "Valid credentials", "source": "auth"}
+{"timestamp": "2025-11-17T19:35:35.166139Z", "username": "alice", "event": "login", "success": true, "reason": "Valid credentials", "source": "auth"}
+{"timestamp": "2025-11-17T19:40:29.348088Z", "username": "alice", "event": "login", "success": true, "reason": "Valid credentials", "source": "auth"}
+{"timestamp": "2025-11-17T19:44:13.271915Z", "username": "bob", "event": "login", "success": true, "reason": "Valid credentials", "source": "auth"}
+{"timestamp": "2025-11-17T19:52:52.350721Z", "username": "bob", "event": "login", "success": true, "reason": "Valid credentials", "source": "auth"}
+{"timestamp": "2025-11-17T19:58:26.067941Z", "username": "alice", "event": "login", "success": false, "reason": "Invalid password", "source": "auth"}
+{"timestamp": "2025-11-17T19:58:33.821187Z", "username": "annie", "event": "login", "success": true, "reason": "Valid credentials", "source": "auth"}

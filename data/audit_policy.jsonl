@@ -301,3 +301,61 @@
 {"timestamp": "2025-11-17T20:17:48.223673", "user": "bob", "operation": "list", "path": "/", "allowed": true, "reason": "Allowed by all policies"}
 {"timestamp": "2025-11-17T20:17:51.991789", "user": "bob", "operation": "list", "path": "/public", "allowed": true, "reason": "Allowed by all policies"}
 {"timestamp": "2025-11-17T20:18:11.431256", "user": "bob", "operation": "list", "path": "/public/reports", "allowed": false, "reason": "DAC: DENY, group 'interns' lacks permission on /public/reports (mode=0o741) | MAC: ALLOW | RBAC: ALLOW"}
+{"timestamp": "2025-11-17T20:23:32.045955", "user": "james", "operation": "realpath", "path": "/", "allowed": true, "reason": "Allowed by all policies"}
+{"timestamp": "2025-11-17T20:23:39.157419", "user": "james", "operation": "list", "path": "/internal/project", "allowed": true, "reason": "Allowed by all policies"}
+{"timestamp": "2025-11-17T20:23:57.007355", "user": "james", "operation": "write", "path": "/internal/project/test_james.txt", "allowed": true, "reason": "Allowed by all policies"}
+{"timestamp": "2025-11-17T20:25:30.461192", "user": "james", "operation": "write", "path": "/internal/project/test_james.txt", "allowed": true, "reason": "Allowed by all policies"}
+{"timestamp": "2025-11-17T20:25:30.464198", "user": "james", "operation": "write", "path": "<file>", "allowed": false, "reason": "DAC: DENY, no matching rule for path | MAC: DENY, no write down (internal != confidential) | RBAC: DENY, no matching role permission"}
+{"timestamp": "2025-11-17T20:30:08.635432", "user": "james", "operation": "list", "path": "/internal/project", "allowed": true, "reason": "Allowed by all policies"}
+{"timestamp": "2025-11-17T20:31:42.446374", "user": "james", "operation": "list", "path": "/confidential/admin", "allowed": false, "reason": "DAC: DENY, other lacks permission on /confidential/admin (mode=0o740) | MAC: DENY, no read up (internal < confidential) | RBAC: ALLOW"}
+{"timestamp": "2025-11-17T20:31:52.720876", "user": "james", "operation": "stat", "path": "/confidential/admin", "allowed": false, "reason": "DAC: DENY, other lacks permission on /confidential/admin (mode=0o740) | MAC: DENY, no read up (internal < confidential) | RBAC: ALLOW"}
+{"timestamp": "2025-11-17T20:32:15.537225", "user": "james", "operation": "write", "path": "/public/reports/james_fail.txt", "allowed": false, "reason": "DAC: DENY, other lacks permission on /public/reports (mode=0o741) | MAC: DENY, no write down (internal != public) | RBAC: ALLOW"}
+{"timestamp": "2025-11-17T20:33:04.439738", "user": "james", "operation": "read", "path": "/internal/project/test_james.txt", "allowed": true, "reason": "Allowed by all policies"}
+{"timestamp": "2025-11-17T20:33:04.441520", "user": "james", "operation": "read", "path": "/internal/project/test_james.txt", "allowed": true, "reason": "Allowed by all policies"}
+{"timestamp": "2025-11-17T20:33:04.441936", "user": "james", "operation": "read", "path": "/internal/project/test_james.txt", "allowed": true, "reason": "Allowed by all policies"}
+{"timestamp": "2025-11-17T20:34:52.832015", "user": "james", "operation": "read", "path": "/internal/public/reports/test_james.txt", "allowed": true, "reason": "Allowed by all policies"}
+{"timestamp": "2025-11-17T20:35:14.190118", "user": "james", "operation": "read", "path": "/internal/project/test_james.txt", "allowed": true, "reason": "Allowed by all policies"}
+{"timestamp": "2025-11-17T20:35:14.191808", "user": "james", "operation": "read", "path": "/internal/project/test_james.txt", "allowed": true, "reason": "Allowed by all policies"}
+{"timestamp": "2025-11-17T20:35:14.192254", "user": "james", "operation": "read", "path": "/internal/project/test_james.txt", "allowed": true, "reason": "Allowed by all policies"}
+{"timestamp": "2025-11-17T20:35:14.192683", "user": "james", "operation": "read", "path": "/internal/project/test_james.txt", "allowed": true, "reason": "Allowed by all policies"}
+{"timestamp": "2025-11-17T20:35:14.193337", "user": "james", "operation": "read", "path": "/internal/project/test_james.txt", "allowed": true, "reason": "Allowed by all policies"}
+{"timestamp": "2025-11-17T20:35:14.193585", "user": "james", "operation": "read", "path": "/internal/project/test_james.txt", "allowed": true, "reason": "Allowed by all policies"}
+{"timestamp": "2025-11-17T20:35:43.381924", "user": "alice", "operation": "mkdir", "path": "/public/reports", "allowed": false, "reason": "DAC: ALLOW | MAC: DENY, no write down (internal != public) | RBAC: ALLOW"}
+{"timestamp": "2025-11-17T20:36:03.857311", "user": "alice", "operation": "write", "path": "/public/reports/alice_file.txt", "allowed": false, "reason": "DAC: ALLOW | MAC: DENY, no write down (internal != public) | RBAC: ALLOW"}
+{"timestamp": "2025-11-17T20:40:37.608220", "user": "alice", "operation": "mkdir", "path": "/public/reports", "allowed": true, "reason": "Allowed by all policies"}
+{"timestamp": "2025-11-17T20:40:59.913741", "user": "alice", "operation": "write", "path": "/public/reports/alice_text.txt", "allowed": true, "reason": "Allowed by all policies"}
+{"timestamp": "2025-11-17T20:40:59.916599", "user": "alice", "operation": "write", "path": "/public/reports/alice_text.txt", "allowed": true, "reason": "Allowed by all policies"}
+{"timestamp": "2025-11-17T20:41:23.764911", "user": "alice", "operation": "list", "path": "/public/reports", "allowed": true, "reason": "Allowed by all policies"}
+{"timestamp": "2025-11-17T20:41:53.466580", "user": "alice", "operation": "list", "path": "/confidential/admin", "allowed": false, "reason": "DAC: DENY, other lacks permission on /confidential/admin (mode=0o740) | MAC: DENY, no read up (internal < confidential) | RBAC: ALLOW"}
+{"timestamp": "2025-11-17T20:43:18.440543", "user": "alice", "operation": "read", "path": "/internal/project/test_james.txt", "allowed": false, "reason": "DAC: DENY, other lacks permission on /internal/project (mode=0o760) | MAC: ALLOW | RBAC: ALLOW"}
+{"timestamp": "2025-11-17T20:44:18.591054", "user": "bob", "operation": "list", "path": "/public/reports", "allowed": false, "reason": "DAC: DENY, group 'interns' lacks permission on /public/reports (mode=0o741) | MAC: ALLOW | RBAC: ALLOW"}
+{"timestamp": "2025-11-17T20:44:38.496016", "user": "bob", "operation": "list", "path": "/", "allowed": true, "reason": "Allowed by all policies"}
+{"timestamp": "2025-11-17T20:44:45.500153", "user": "bob", "operation": "list", "path": "/public", "allowed": true, "reason": "Allowed by all policies"}
+{"timestamp": "2025-11-17T20:45:34.790654", "user": "bob", "operation": "stat", "path": "/public/reports/alice_text.txt", "allowed": false, "reason": "DAC: DENY, group 'interns' lacks permission on /public/reports (mode=0o741) | MAC: ALLOW | RBAC: ALLOW"}
+{"timestamp": "2025-11-17T20:52:57.191274", "user": "bob", "operation": "list", "path": "/public/reports", "allowed": true, "reason": "Allowed by all policies"}
+{"timestamp": "2025-11-17T20:53:18.053576", "user": "bob", "operation": "stat", "path": "/public/reports/alice_text.txt", "allowed": true, "reason": "Allowed by all policies"}
+{"timestamp": "2025-11-17T20:56:09.427992", "user": "bob", "operation": "write", "path": "/public/reports/bob_test.txt", "allowed": false, "reason": "DAC: DENY, group 'interns' lacks permission on /public/reports (mode=0o751) | MAC: ALLOW | RBAC: ALLOW"}
+{"timestamp": "2025-11-17T20:56:30.394966", "user": "bob", "operation": "realpath", "path": "/", "allowed": true, "reason": "Allowed by all policies"}
+{"timestamp": "2025-11-17T20:57:35.733657", "user": "bob", "operation": "list", "path": "/confidential/admin", "allowed": false, "reason": "DAC: DENY, other lacks permission on /confidential/admin (mode=0o740) | MAC: DENY, no read up (internal < confidential) | RBAC: ALLOW"}
+{"timestamp": "2025-11-17T20:57:43.384330", "user": "bob", "operation": "stat", "path": "/confidential/admin", "allowed": false, "reason": "DAC: DENY, other lacks permission on /confidential/admin (mode=0o740) | MAC: DENY, no read up (internal < confidential) | RBAC: ALLOW"}
+{"timestamp": "2025-11-17T20:58:01.219290", "user": "bob", "operation": "read", "path": "/confidential/admin/annie_secretet.txt", "allowed": false, "reason": "DAC: DENY, other lacks permission on /confidential/admin (mode=0o740) | MAC: DENY, no read up (internal < confidential) | RBAC: ALLOW"}
+{"timestamp": "2025-11-17T20:58:41.870316", "user": "annie", "operation": "list", "path": "/public/reports", "allowed": false, "reason": "DAC: DENY, other lacks permission on /public/reports (mode=0o751) | MAC: ALLOW | RBAC: ALLOW"}
+{"timestamp": "2025-11-17T21:00:17.839527", "user": "annie", "operation": "mkdir", "path": "/confidential/admin", "allowed": true, "reason": "Allowed by all policies"}
+{"timestamp": "2025-11-17T21:01:01.039256", "user": "annie", "operation": "write", "path": "/confidential/admin/admin_file.txt", "allowed": true, "reason": "Allowed by all policies"}
+{"timestamp": "2025-11-17T21:01:01.042227", "user": "annie", "operation": "write", "path": "/confidential/admin/admin_file.txt", "allowed": true, "reason": "Allowed by all policies"}
+{"timestamp": "2025-11-17T21:01:12.709610", "user": "annie", "operation": "list", "path": "/confidential/admin", "allowed": true, "reason": "Allowed by all policies"}
+{"timestamp": "2025-11-17T21:01:33.141417", "user": "annie", "operation": "mkdir", "path": "/confidential/text", "allowed": false, "reason": "DAC: ALLOW | MAC: ALLOW | RBAC: DENY, no matching role permission"}
+{"timestamp": "2025-11-17T21:02:37.144727", "user": "annie", "operation": "list", "path": "/confidential", "allowed": true, "reason": "Allowed by all policies"}
+{"timestamp": "2025-11-17T21:02:57.138884", "user": "annie", "operation": "list", "path": "/public/policy", "allowed": true, "reason": "Allowed by all policies"}
+{"timestamp": "2025-11-17T21:03:26.134755", "user": "annie", "operation": "list", "path": "/internal", "allowed": true, "reason": "Allowed by all policies"}
+{"timestamp": "2025-11-17T21:03:36.783686", "user": "annie", "operation": "list", "path": "/internal/project", "allowed": false, "reason": "DAC: DENY, group 'analysts' lacks permission on /internal/project (mode=0o760) | MAC: ALLOW | RBAC: ALLOW"}
+{"timestamp": "2025-11-17T21:04:19.803674", "user": "annie", "operation": "list", "path": "/confidential/text", "allowed": true, "reason": "Allowed by all policies"}
+{"timestamp": "2025-11-17T21:04:32.584736", "user": "annie", "operation": "list", "path": "/confidential/admin", "allowed": true, "reason": "Allowed by all policies"}
+{"timestamp": "2025-11-17T21:04:45.678363", "user": "annie", "operation": "stat", "path": "/internal/project", "allowed": false, "reason": "DAC: DENY, group 'analysts' lacks permission on /internal/project (mode=0o760) | MAC: ALLOW | RBAC: ALLOW"}
+{"timestamp": "2025-11-17T21:10:12.138204", "user": "annie", "operation": "mkdir", "path": "/confidential/admin", "allowed": true, "reason": "Allowed by all policies"}
+{"timestamp": "2025-11-17T21:10:37.085391", "user": "annie", "operation": "mkdir", "path": "/confidential/text", "allowed": false, "reason": "DAC: ALLOW | MAC: ALLOW | RBAC: DENY, no matching role permission"}
+{"timestamp": "2025-11-17T21:11:21.918290", "user": "annie", "operation": "list", "path": "/public", "allowed": true, "reason": "Allowed by all policies"}
+{"timestamp": "2025-11-17T21:11:24.781897", "user": "annie", "operation": "list", "path": "/internal", "allowed": true, "reason": "Allowed by all policies"}
+{"timestamp": "2025-11-17T21:11:33.110428", "user": "annie", "operation": "stat", "path": "/internal/project", "allowed": false, "reason": "DAC: DENY, group 'analysts' lacks permission on /internal/project (mode=0o760) | MAC: ALLOW | RBAC: ALLOW"}
+{"timestamp": "2025-11-17T21:11:41.117091", "user": "annie", "operation": "list", "path": "/internal/project", "allowed": false, "reason": "DAC: DENY, group 'analysts' lacks permission on /internal/project (mode=0o760) | MAC: ALLOW | RBAC: ALLOW"}
+{"timestamp": "2025-11-17T21:11:57.049353", "user": "annie", "operation": "write", "path": "/public/policy/fail.txt", "allowed": false, "reason": "DAC: ALLOW | MAC: DENY, no write down (confidential != public) | RBAC: DENY, no matching role permission"}

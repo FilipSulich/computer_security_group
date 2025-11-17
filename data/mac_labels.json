@@ -1,7 +1,7 @@
 {
   "users": {
     "alice": "internal",
-    "bob": "public",
+    "bob": "internal",
     "annie": "confidential",
     "james": "internal"
   },
@@ -9,7 +9,8 @@
     "/": "public",
     "/confidential": "confidential",
     "/internal": "internal",
-    "/public": "public"
+    "/public": "public",
+    "/public/reports": "internal"
   },
   "levels": ["public", "internal", "confidential"]
 }
