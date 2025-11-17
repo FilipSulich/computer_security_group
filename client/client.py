@@ -67,12 +67,13 @@ async def sftp_cli(sftp):
                 lpath = parts[2] if len(parts) > 2 else os.path.basename(rpath)
 
                 try:
-                    async with sftp.open(rpath, 'rb') as remote_file, open(lpath, 'wb') as local_file:
-                        while True:
-                            data = await remote_file.read(32768)
-                            if not data:
-                                break
-                            local_file.write(data)
+                    with open(lpath, 'wb') as local_file:
+                        async with sftp.open(rpath, 'rb') as remote_file:
+                            while True:
+                                data = await remote_file.read(32768)
+                                if not data:
+                                    break
+                                local_file.write(data)
                     print(f"Downloaded '{rpath}' to '{lpath}'")
                 except (asyncssh.SFTPError, OSError) as e:
                     print(f"Error downloading file: {e}")
@@ -89,12 +90,13 @@ async def sftp_cli(sftp):
                     continue
 
                 try:
-                    async with sftp.open(rpath, 'wb') as remote_file, open(lpath, 'rb') as local_file:
-                        while True:
-                            data = local_file.read(32768)
-                            if not data:
-                                break
-                            await remote_file.write(data)
+                    with open(lpath, 'rb') as local_file:
+                        async with sftp.open(rpath, 'wb') as remote_file:
+                            while True:
+                                data = local_file.read(32768)
+                                if not data:
+                                    break
+                                await remote_file.write(data)
                     print(f"Uploaded '{lpath}' to '{rpath}'")
                 except (asyncssh.SFTPError, OSError) as e:
                     print(f"Error uploading file: {e}")
