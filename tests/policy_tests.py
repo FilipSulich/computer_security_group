@@ -11,7 +11,7 @@ server_dir = os.path.join(os.path.dirname(__file__), '..', 'server')
 os.chdir(server_dir)
 sys.path.insert(0, server_dir)
 
-from server.policy import AccessControl
+from policy import AccessControl
 
 @pytest.fixture
 def ac():
