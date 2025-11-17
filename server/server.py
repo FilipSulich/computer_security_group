@@ -96,9 +96,9 @@ class DirHandle:
         self.idx = 0
 
 class FileHandle:
-    def __init__(self, file_obj, path):
+    def __init__(self, file_obj, canonical_path):
         self.file_obj = file_obj
-        self.path = path
+        self.canonical_path = canonical_path
 
 class Handles:
     def __init__(self):
@@ -116,8 +116,12 @@ class Handles:
 
     def close(self, hid):
         obj = self._map.pop(hid, None)
-        if obj and isinstance(obj, FileHandle):
-            obj.file_obj.close()
+        # Close file if it's a FileHandle
+        if isinstance(obj, FileHandle) and hasattr(obj.file_obj, 'close'):
+            try:
+                obj.file_obj.close()
+            except Exception:
+                pass
 
 
 #SFTP session - handling table management
@@ -328,6 +332,8 @@ class SFTPSession(asyncssh.SSHServerSession):
             except Exception as e:
                 return self._send_status(req_id, SSH_FX_FAILURE, str(e).encode())
 
+            # Store file handle with canonical path for authorization checks
+            file_handle = FileHandle(f, canon)
             handle = self.handles.add(file_handle)
             return self._chan.write(pack_pkt(SSH_FXP_HANDLE, p_u32(req_id) + handle))
 
@@ -337,18 +343,19 @@ class SFTPSession(asyncssh.SSHServerSession):
             offset, off = u64(payload, off)
             length, off = u32(payload, off)
 
-            fh = self.handles.get(handle_bs)
+            file_handle = self.handles.get(handle_bs)
 
-            if not fh or not isinstance(fh, FileHandle):
+            if not file_handle or not isinstance(file_handle, FileHandle):
                 return self._send_status(req_id, SSH_FX_FAILURE, b"bad handle")
 
-            allowed, rec = self.ac.authorize(self.username, "read", fh.path)
+            # Check authorization with the actual file path
+            allowed, rec = self.ac.authorize(self.username, "read", file_handle.canonical_path)
 
             if not allowed:
                 return self._send_status(req_id, SSH_FX_PERMISSION_DENIED, rec["reason"].encode())
 
-            fh.file_obj.seek(offset)
-            data = fh.file_obj.read(length)
+            file_handle.file_obj.seek(offset)
+            data = file_handle.file_obj.read(length)
 
             if not data:
                 return self._send_status(req_id, SSH_FX_EOF, b"EOF")
@@ -364,17 +371,18 @@ class SFTPSession(asyncssh.SSHServerSession):
             offset, off = u64(payload, off)
             data, off = ustr(payload, off)
 
-            fh = self.handles.get(handle_bs)
-            if not fh or not isinstance(fh, FileHandle):
+            file_handle = self.handles.get(handle_bs)
+            if not file_handle or not isinstance(file_handle, FileHandle):
                 return self._send_status(req_id, SSH_FX_FAILURE, b"bad handle")
 
-            allowed, rec = self.ac.authorize(self.username, "write", fh.path)
+            # Check authorization with the actual file path
+            allowed, rec = self.ac.authorize(self.username, "write", file_handle.canonical_path)
             if not allowed:
                 return self._send_status(req_id, SSH_FX_PERMISSION_DENIED, rec["reason"].encode())
 
-            fh.file_obj.seek(offset)
-            fh.file_obj.write(data)
-            fh.file_obj.flush()
+            file_handle.file_obj.seek(offset)
+            file_handle.file_obj.write(data)
+            file_handle.file_obj.flush()
             return self._send_status(req_id, SSH_FX_OK, b"OK")
 
         #CLOSE
