@@ -10,7 +10,7 @@ from datetime import datetime
 from typing import Optional, Dict
 from collections import defaultdict
 
-# Try to use argon2-cffi (recommended), fall back to scrypt
+# use argon2-cffi (recommended), fall back to scrypt
 try:
     from argon2 import PasswordHasher
     from argon2.exceptions import VerifyMismatchError, InvalidHash
@@ -29,10 +29,10 @@ except ImportError:
 
 
 # Configuration
-PEPPER = os.environ.get('SFTP_PEPPER', 'change-this-secret-pepper-in-production')
+PEPPER = os.environ.get('SFTP_PEPPER', 'very$ave$ecret&epper537!')
 MAX_FAILED_ATTEMPTS = 5
-LOCKOUT_DURATION = 300  # 5 minutes in seconds
-RATE_LIMIT_WINDOW = 60  # 1 minute
+LOCKOUT_DURATION = 300  # 5 min in seconds (5x600)
+RATE_LIMIT_WINDOW = 60  # 1 min
 MAX_ATTEMPTS_PER_WINDOW = 10
 AUDIT_LOG_PATH = os.path.join(os.path.dirname(__file__), 'audit_auth.jsonl')
 
@@ -43,7 +43,8 @@ _rate_limit_tracker: Dict[str, list] = defaultdict(list)
 
 
 # password hashing using Argon2id
-def hash_password(password: str) -> str:
+
+def hash_password(password: str):
 
     # Add pepper before hashing
     peppered = password + PEPPER
@@ -66,7 +67,8 @@ def hash_password(password: str) -> str:
         return f"scrypt${salt.hex()}${key.hex()}"
 
 # verifies password againts its hash
-def verify_password(password: str, password_hash: str) -> bool:
+
+def verify_password(password: str, password_hash: str):
 
     peppered = password + PEPPER
     
@@ -102,9 +104,11 @@ def verify_password(password: str, password_hash: str) -> bool:
         return False
 
 # Path to user database file
-USER_DATABASE_PATH = os.path.join(os.path.dirname(__file__), '..', 'data', 'users.json')
+PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+USER_DATABASE_PATH = os.path.join(PROJECT_ROOT, 'data', 'users.json')
 
-def load_users() -> list:
+
+def load_users():
     """Load users from JSON file (returns array)"""
     try:
         with open(USER_DATABASE_PATH, 'r') as f:
@@ -122,7 +126,7 @@ def save_users(users: list):
     with open(USER_DATABASE_PATH, 'w') as f:
         json.dump(users, f, indent=2)
 
-def get_user(username: str) -> Optional[dict]:
+def get_user(username: str):
     """Retrieve user from JSON database (searches array)"""
     users = load_users()
     for user in users:
@@ -131,7 +135,7 @@ def get_user(username: str) -> Optional[dict]:
     return None
 
 # checks if user has exceeded rate limit
-def check_rate_limit(username: str) -> bool:
+def check_rate_limit(username: str):
 
     now = time.time()
     cutoff = now - RATE_LIMIT_WINDOW
@@ -150,10 +154,11 @@ def check_rate_limit(username: str) -> bool:
     return True
 
 # checks if account is locked out
-def is_locked_out(username: str) -> bool:
+def is_locked_out(username: str):
     """Check if account is locked out"""
     if username in _lockout_until:
         if time.time() < _lockout_until[username]:
+            print('The user is locked out')
             return True
         else:
             # Lockout expired, clear it
@@ -265,72 +270,4 @@ def validate_user_password(username: str, password: str):
         audit_log(username, 'login', success=False, reason='Invalid password')
         return False
 
-
-# testing/debugging functions
-if __name__ == "__main__":
-    import getpass
-    import sys
     
-    print("=== Authentication Module Test ===\n")
-    print(f"Using: {'Argon2id' if USE_ARGON2 else 'scrypt (fallback)'}")
-    print(f"Pepper configured: {'Yes' if PEPPER != 'change-this-secret-pepper-in-production' else 'No (using default!)'}\n")
-    print("Available users: bob, alice, james, annie")
-    print("Type 'quit' or 'exit' to stop")
-    print("Type 'setup' to create test users\n")
-    
-    # Interactive testing loop
-    attempt_count = 0
-    while True:
-        try:
-            # Get username
-            username = input("Username: ").strip()
-            
-            if username.lower() in ('quit', 'exit', 'q'):
-                print("\nExiting...")
-                break
-        
-            if not username:
-                continue
-            
-            # Get password (hidden input)
-            password = getpass.getpass("Password: ")
-            
-            # Validate
-            attempt_count += 1
-            print(f"\n[Attempt {attempt_count}] Authenticating '{username}'...")
-            result = validate_user_password(username, password)
-            
-            if result:
-                print(f"✓ Authentication SUCCESSFUL for '{username}'")
-                user = get_user(username)
-                if user:
-                    print(f"  Status: {'Active' if user.get('active') else 'Inactive'}")
-            else:
-                print(f"✗ Authentication FAILED for '{username}'")
-                
-                # Show helpful info
-                if get_user(username):
-                    if is_locked_out(username):
-                        remaining = int(_lockout_until.get(username, 0) - time.time())
-                        print(f"  ⚠ Account is LOCKED OUT (unlocks in {remaining}s)")
-                    else:
-                        failed = _failed_attempts.get(username, 0)
-                        remaining_attempts = MAX_FAILED_ATTEMPTS - failed
-                        if remaining_attempts > 0:
-                            print(f"  Failed attempts: {failed}/{MAX_FAILED_ATTEMPTS}")
-                            print(f"  {remaining_attempts} attempts remaining before lockout")
-                else:
-                    print(f"  User '{username}' does not exist")
-            
-            print()
-        
-        except KeyboardInterrupt:
-            print("\n\nInterrupted. Exiting...")
-            break
-        except EOFError:
-            print("\n\nExiting...")
-            break
-    
-    print(f"\nTotal authentication attempts: {attempt_count}")
-    print(f"Audit log written to: {AUDIT_LOG_PATH}")
-    print("\nRun with: python server/auth.py")

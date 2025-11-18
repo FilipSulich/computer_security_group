@@ -1,8 +1,8 @@
 [
   {
     "username": "alice",
-    "salt": "8FU6fTz6Hqoo89fCysQsBg",
-    "password_hash": "hIaqDR5iGwI36l0sbRmJPo1bDnEJRiNdXZ1qNn2pyQM",
+    "salt": "whh/ZThMQ6bgCOC6xC8rMQ",
+    "password_hash": "itqGpmliY+jwJAOt3TOIxa0f4EIegyvSwaGHMUlTwP4",
     "active": true,
     "n": 16384,
     "r": 8,
@@ -11,8 +11,8 @@
   },
   {
     "username": "annie",
-    "salt": "BhKS47jLG3PgmL65LJV/4A",
-    "password_hash": "+eaJj/HsPG+yUdR1T1k13QXUUt/xNgjTriJHx9icXuI",
+    "salt": "v7N/NqhQ6SBNqVlcK51xJQ",
+    "password_hash": "2cnkvuUuiuztk6Mmy1lciSx4EfrrLtKs/bDCSoEwjJE",
     "active": true,
     "n": 16384,
     "r": 8,
@@ -21,8 +21,8 @@
   },
   {
     "username": "james",
-    "salt": "UM5cNQPX8oouskNXljk0KA",
-    "password_hash": "5Y+wjmi5xo2yXyralZzQCYPfjs5C2js/YUJRVsOPBCQ",
+    "salt": "0a7yGq0uWePi4KmNZhtZDA",
+    "password_hash": "/NHLvu4ayE3qtMbh9/s/P5ljy5cg6eQTro1TTCErnqc",
     "active": true,
     "n": 16384,
     "r": 8,
@@ -31,8 +31,8 @@
   },
   {
     "username": "bob",
-    "salt": "kjp2mNKxXo0dY8fBJyrgyQ",
-    "password_hash": "PU5UCVqg5xIMOGOL/k2sopjaW4SEhV51Gzm8ayQ5jU8",
+    "salt": "tW8hLxnWgIAUPRxnRuailw",
+    "password_hash": "+3sAME2+Wlv7t7zOGn2yFjbno5pgoQK8XCPI4XeyGrw",
     "active": true,
     "n": 16384,
     "r": 8,
