@@ -207,3 +207,26 @@ All required commands implemented:
 - Handles server responses correctly
 - Manages file handles for get/put operations
 - Supports both absolute and relative paths
+
+## CTF Flag
+**Location:** `/confidential/admin/secrets/.hidden/flag.txt`  
+**Flag:** `FLAG{group_CS_triple_layer_victory}`
+
+The flag is protected by three independent security layers:
+- **DAC**: File owned by annie with mode 0o400 (read-only for owner)
+- **MAC**: Requires "confidential" clearance (only annie has this)
+- **RBAC**: Requires "admin" role (only annie has this)
+
+See `CTF_writeup.pdf` for complete analysis.
+
+**Test successful access:**
+```bash
+python client/client.py
+# Username: annie, Password: admin789
+sftp> get /confidential/admin/secrets/.hidden/flag.txt ./flag.txt
+```
+
+**Test denied access:**
+```bash
+# Bob and James are blocked by all three layers
+```
