@@ -36,7 +36,6 @@ RATE_LIMIT_WINDOW = 60  # 1 min
 MAX_ATTEMPTS_PER_WINDOW = 10
 AUDIT_LOG_PATH = os.path.join(os.path.dirname(__file__), 'audit_auth.jsonl')
 
-
 # In-memory tracking (in production, use Redis or database)
 _failed_attempts: Dict[str, int] = defaultdict(int)
 _lockout_until: Dict[str, float] = {}
@@ -103,7 +102,6 @@ def verify_password(password: str, password_hash: str):
     
     except (VerifyMismatchError, InvalidHash, ValueError):
         return False
-
 
 # Path to user database file
 PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))

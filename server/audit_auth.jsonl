@@ -57,6 +57,56 @@
 {"timestamp": "2025-11-17T23:26:52.114543Z", "username": "alice", "event": "login", "success": true, "reason": "Valid credentials", "source": "auth"}
 {"timestamp": "2025-11-17T23:27:00.426182Z", "username": "james", "event": "login", "success": true, "reason": "Valid credentials", "source": "auth"}
 {"timestamp": "2025-11-17T23:27:07.938145Z", "username": "annie", "event": "login", "success": true, "reason": "Valid credentials", "source": "auth"}
+<<<<<<< HEAD
+{"timestamp": "2025-11-18T12:39:21.291334Z", "username": "alice", "event": "login", "success": true, "reason": "Valid credentials", "source": "auth"}
+{"timestamp": "2025-11-18T15:46:09.001559Z", "username": "bob", "event": "login", "success": true, "reason": "Valid credentials", "source": "auth"}
+{"timestamp": "2025-11-18T15:46:11.417057Z", "username": "bob", "event": "login", "success": true, "reason": "Valid credentials", "source": "auth"}
+{"timestamp": "2025-11-18T15:46:13.576153Z", "username": "bob", "event": "login", "success": false, "reason": "Invalid password", "source": "auth"}
+{"timestamp": "2025-11-18T15:46:15.737142Z", "username": "\u001b[A", "event": "login", "success": false, "reason": "User not found", "source": "auth"}
+{"timestamp": "2025-11-18T15:46:18.589891Z", "username": "as", "event": "login", "success": false, "reason": "User not found", "source": "auth"}
+{"timestamp": "2025-11-18T15:46:20.914411Z", "username": "bob", "event": "login", "success": false, "reason": "Invalid password", "source": "auth"}
+{"timestamp": "2025-11-18T15:46:23.172291Z", "username": "bob", "event": "login", "success": false, "reason": "Invalid password", "source": "auth"}
+{"timestamp": "2025-11-18T15:46:24.693495Z", "username": "bob", "event": "login", "success": false, "reason": "Invalid password", "source": "auth"}
+{"timestamp": "2025-11-18T15:46:26.099377Z", "username": "bob", "event": "lockout", "success": false, "reason": "Too many failed attempts (5)", "source": "auth"}
+{"timestamp": "2025-11-18T15:46:26.099564Z", "username": "bob", "event": "login", "success": false, "reason": "Invalid password", "source": "auth"}
+{"timestamp": "2025-11-18T15:48:09.540475Z", "username": "bob", "event": "login", "success": true, "reason": "Valid credentials", "source": "auth"}
+{"timestamp": "2025-11-18T15:48:21.652472Z", "username": "bob", "event": "login", "success": true, "reason": "Valid credentials", "source": "auth"}
+{"timestamp": "2025-11-18T16:02:05.229967Z", "username": "bob", "event": "login", "success": false, "reason": "Invalid password", "source": "auth"}
+{"timestamp": "2025-11-18T16:02:05.281363Z", "username": "bob", "event": "login", "success": false, "reason": "Invalid password", "source": "auth"}
+{"timestamp": "2025-11-18T16:02:05.331091Z", "username": "bob", "event": "login", "success": false, "reason": "Invalid password", "source": "auth"}
+{"timestamp": "2025-11-18T16:02:05.382293Z", "username": "bob", "event": "login", "success": false, "reason": "Invalid password", "source": "auth"}
+{"timestamp": "2025-11-18T16:02:05.434343Z", "username": "bob", "event": "lockout", "success": false, "reason": "Too many failed attempts (5)", "source": "auth"}
+{"timestamp": "2025-11-18T16:02:05.434494Z", "username": "bob", "event": "login", "success": false, "reason": "Invalid password", "source": "auth"}
+{"timestamp": "2025-11-18T16:02:05.435033Z", "username": "bob", "event": "login", "success": false, "reason": "Account locked (unlocks in 299s)", "source": "auth"}
+{"timestamp": "2025-11-18T16:04:16.361612Z", "username": "bob", "event": "login", "success": true, "reason": "Valid credentials", "source": "auth"}
+{"timestamp": "2025-11-18T16:07:58.148910Z", "username": "bob", "event": "login", "success": true, "reason": "Valid credentials", "source": "auth"}
+{"timestamp": "2025-11-18T16:09:22.639408Z", "username": "bob", "event": "login", "success": true, "reason": "Valid credentials", "source": "auth"}
+{"timestamp": "2025-11-18T16:16:00.569839Z", "username": "bob", "event": "login", "success": false, "reason": "Invalid password", "source": "auth"}
+{"timestamp": "2025-11-18T16:16:05.864464Z", "username": "bob", "event": "login", "success": false, "reason": "Invalid password", "source": "auth"}
+{"timestamp": "2025-11-18T16:16:06.330748Z", "username": "bob", "event": "login", "success": false, "reason": "Invalid password", "source": "auth"}
+{"timestamp": "2025-11-18T16:16:06.702411Z", "username": "bob", "event": "login", "success": false, "reason": "Invalid password", "source": "auth"}
+{"timestamp": "2025-11-18T16:16:07.036694Z", "username": "bob", "event": "lockout", "success": false, "reason": "Too many failed attempts (5)", "source": "auth"}
+{"timestamp": "2025-11-18T16:16:07.036888Z", "username": "bob", "event": "login", "success": false, "reason": "Invalid password", "source": "auth"}
+{"timestamp": "2025-11-18T16:16:08.679788Z", "username": "bob", "event": "login", "success": false, "reason": "Account locked (unlocks in 298s)", "source": "auth"}
+{"timestamp": "2025-11-18T16:16:16.319124Z", "username": "bob", "event": "login", "success": false, "reason": "Account locked (unlocks in 290s)", "source": "auth"}
+{"timestamp": "2025-11-18T16:16:18.306564Z", "username": "bob", "event": "login", "success": false, "reason": "Account locked (unlocks in 288s)", "source": "auth"}
+{"timestamp": "2025-11-18T16:16:25.970699Z", "username": "bob", "event": "login", "success": false, "reason": "Account locked (unlocks in 281s)", "source": "auth"}
+{"timestamp": "2025-11-18T16:16:31.627187Z", "username": "bob", "event": "login", "success": false, "reason": "Account locked (unlocks in 275s)", "source": "auth"}
+{"timestamp": "2025-11-18T16:16:33.687525Z", "username": "bob", "event": "login", "success": false, "reason": "Rate limited", "source": "auth"}
+{"timestamp": "2025-11-18T16:16:51.113707Z", "username": "bob", "event": "login", "success": false, "reason": "Rate limited", "source": "auth"}
+{"timestamp": "2025-11-18T16:17:01.348889Z", "username": "alice", "event": "login", "success": true, "reason": "Valid credentials", "source": "auth"}
+{"timestamp": "2025-11-18T16:17:30.616626Z", "username": "alice", "event": "login", "success": true, "reason": "Valid credentials", "source": "auth"}
+{"timestamp": "2025-11-18T16:23:07.240290Z", "username": "bob", "event": "login", "success": true, "reason": "Valid credentials", "source": "auth"}
+{"timestamp": "2025-11-18T17:04:07.270151Z", "username": "bob", "event": "login", "success": true, "reason": "Valid credentials", "source": "auth"}
+{"timestamp": "2025-11-18T17:06:17.481985Z", "username": "bob", "event": "login", "success": true, "reason": "Valid credentials", "source": "auth"}
+{"timestamp": "2025-11-18T17:16:20.876946Z", "username": "bob", "event": "login", "success": false, "reason": "Invalid password", "source": "auth"}
+{"timestamp": "2025-11-18T17:16:23.946867Z", "username": "bob", "event": "login", "success": true, "reason": "Valid credentials", "source": "auth"}
+{"timestamp": "2025-11-18T17:17:23.220759Z", "username": "bob", "event": "login", "success": true, "reason": "Valid credentials", "source": "auth"}
+{"timestamp": "2025-11-18T17:22:52.894595Z", "username": "alice", "event": "login", "success": true, "reason": "Valid credentials", "source": "auth"}
+{"timestamp": "2025-11-18T17:23:00.838971Z", "username": "james", "event": "login", "success": true, "reason": "Valid credentials", "source": "auth"}
+{"timestamp": "2025-11-18T17:23:10.467883Z", "username": "annie", "event": "login", "success": true, "reason": "Valid credentials", "source": "auth"}
+{"timestamp": "2025-11-18T17:23:15.977209Z", "username": "alice", "event": "login", "success": false, "reason": "Invalid password", "source": "auth"}
+=======
 {"timestamp": "2025-11-18T16:20:55.366276Z", "username": "bob", "event": "login", "success": false, "reason": "User not found", "source": "auth"}
 {"timestamp": "2025-11-18T16:26:16.775496Z", "username": "bob", "event": "login", "success": false, "reason": "User not found", "source": "auth"}
 {"timestamp": "2025-11-18T16:30:07.547444Z", "username": "bob", "event": "login", "success": false, "reason": "User not found", "source": "auth"}
@@ -89,3 +139,4 @@
 {"timestamp": "2025-11-18T17:28:35.612241Z", "username": "bob", "event": "login", "success": false, "reason": "Invalid password", "source": "auth"}
 {"timestamp": "2025-11-18T17:32:15.049009Z", "username": "bob", "event": "login", "success": true, "reason": "Valid credentials", "source": "auth"}
 {"timestamp": "2025-11-18T17:32:37.983138Z", "username": "annie", "event": "login", "success": true, "reason": "Valid credentials", "source": "auth"}
+>>>>>>> 5d740f50df0c378fafe74666beae779d365b3414
