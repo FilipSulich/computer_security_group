@@ -36,7 +36,6 @@ RATE_LIMIT_WINDOW = 60  # 1 minute
 MAX_ATTEMPTS_PER_WINDOW = 10
 AUDIT_LOG_PATH = os.path.join(os.path.dirname(__file__), 'audit_auth.jsonl')
 
-
 # In-memory tracking (in production, use Redis or database)
 _failed_attempts: Dict[str, int] = defaultdict(int)
 _lockout_until: Dict[str, float] = {}
@@ -44,7 +43,6 @@ _rate_limit_tracker: Dict[str, list] = defaultdict(list)
 
 
 # password hashing using Argon2id
-
 def hash_password(password: str) -> str:
 
     # Add pepper before hashing
@@ -68,7 +66,6 @@ def hash_password(password: str) -> str:
         return f"scrypt${salt.hex()}${key.hex()}"
 
 # verifies password againts its hash
-
 def verify_password(password: str, password_hash: str) -> bool:
 
     peppered = password + PEPPER
@@ -104,10 +101,8 @@ def verify_password(password: str, password_hash: str) -> bool:
     except (VerifyMismatchError, InvalidHash, ValueError):
         return False
 
-
 # Path to user database file
 USER_DATABASE_PATH = os.path.join(os.path.dirname(__file__), '..', 'data', 'users.json')
-
 
 def load_users() -> list:
     """Load users from JSON file (returns array)"""
@@ -271,74 +266,10 @@ def validate_user_password(username: str, password: str):
         return False
 
 
-# TESTING SETUP - Create users with passwords
-def setup_test_users():
-    """Create test users in the database"""
-    users = [
-        {
-            "username": "bob",
-            "salt": "",
-            "password_hash": "",
-            "active": True
-        },
-        {
-            "username": "alice",
-            "salt": "",
-            "password_hash": "",
-            "active": True
-        },
-        {
-            "username": "james",
-            "salt": "",
-            "password_hash": "",
-            "active": True
-        },
-        {
-            "username": "annie",
-            "salt": "",
-            "password_hash": "",
-            "active": True
-        }
-    ]
-    
-    # Hash passwords and store
-    passwords = {
-        'bob': 'test',
-        'alice': 'secure123',
-        'james': 'analyst456',
-        'annie': 'admin789'
-    }
-    
-    for user in users:
-        username = user['username']
-        password = passwords[username]
-        full_hash = hash_password(password)
-        
-        if USE_ARGON2:
-            # Extract salt and hash from Argon2 format
-            parts = full_hash.split('$')
-            user['salt'] = parts[4]
-            user['password_hash'] = parts[5]
-        else:
-            # Extract from scrypt format
-            _, salt, hash_part = full_hash.split('$')
-            user['salt'] = salt
-            user['password_hash'] = hash_part
-    
-    save_users(users)
-    print("Test users created!")
-    print("Passwords: bob=test, alice=secure123, james=analyst456, annie=admin789")
-
-
 # testing/debugging functions
 if __name__ == "__main__":
     import getpass
     import sys
-    
-    # Check if setup command
-    if len(sys.argv) > 1 and sys.argv[1] == 'setup':
-        setup_test_users()
-        sys.exit(0)
     
     print("=== Authentication Module Test ===\n")
     print(f"Using: {'Argon2id' if USE_ARGON2 else 'scrypt (fallback)'}")
@@ -357,11 +288,7 @@ if __name__ == "__main__":
             if username.lower() in ('quit', 'exit', 'q'):
                 print("\nExiting...")
                 break
-            
-            if username.lower() == 'setup':
-                setup_test_users()
-                continue
-            
+        
             if not username:
                 continue
             

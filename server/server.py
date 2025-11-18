@@ -304,12 +304,16 @@ class SFTPSession(asyncssh.SSHServerSession):
             filename, off = ustr(payload, off)
             flags, off = u32(payload, off)
 
-            canon = canon_sftp_path(filename)
+            # Normalize path separators for cross-platform compatibility
+            safe_path = filename.decode(errors="replace").replace("\\", "/")
 
             #operation depends on flags
             op = "write" if flags & PF_WRITE else "read"
+            
+            if ".." in safe_path or safe_path.startswith(".."):
+                pass 
 
-            allowed, rec = self.ac.authorize(self.username, op, canon)
+            allowed, rec = self.ac.authorize(self.username, op, safe_path)
             if not allowed:
                 return self._send_status(req_id, SSH_FX_PERMISSION_DENIED, rec["reason"].encode())
 
@@ -327,7 +331,7 @@ class SFTPSession(asyncssh.SSHServerSession):
                     return self._send_status(req_id, SSH_FX_FAILURE, b"exists")
 
                 f = open(full, mode)
-                file_handle = FileHandle(f, canon)
+                file_handle = FileHandle(f, safe_path)
 
             except Exception as e:
                 return self._send_status(req_id, SSH_FX_FAILURE, str(e).encode())

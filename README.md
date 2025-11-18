@@ -93,7 +93,7 @@ These tests verify that:
 
 - A user with **Internal clearance** can **read** files classified as *Public* or *Internal*, but is **denied access** to *Confidential* files.  
 - A user with **Confidential clearance** **cannot write down** to *Public* files or directories (to prevent data leaks).  
-- The **read-up, no write-down** rule is consistently enforced across all MAC-protected resources.
+- The **no-read-up, no write-down** rule is consistently enforced across all MAC-protected resources.
 
 ---
 
