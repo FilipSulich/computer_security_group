@@ -307,7 +307,6 @@ class SFTPSession(asyncssh.SSHServerSession):
             # Normalize path separators for cross-platform compatibility
             safe_path = filename.decode(errors="replace").replace("\\", "/")
 
-            #operation depends on flags
             op = "write" if flags & PF_WRITE else "read"
             
             if ".." in safe_path or safe_path.startswith(".."):

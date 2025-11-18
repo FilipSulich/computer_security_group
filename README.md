@@ -49,7 +49,6 @@ Then login with credentials:
 
 ### Known Limitations
 - Server binds to port 2222 (requires available port)
-- In-memory authentication tracking (resets on restart)
 - Single-threaded async event loop
 - SFTP v3 protocol only (no v4/v5/v6 extensions)
 

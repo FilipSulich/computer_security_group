@@ -106,7 +106,6 @@
 {"timestamp": "2025-11-18T17:23:00.838971Z", "username": "james", "event": "login", "success": true, "reason": "Valid credentials", "source": "auth"}
 {"timestamp": "2025-11-18T17:23:10.467883Z", "username": "annie", "event": "login", "success": true, "reason": "Valid credentials", "source": "auth"}
 {"timestamp": "2025-11-18T17:23:15.977209Z", "username": "alice", "event": "login", "success": false, "reason": "Invalid password", "source": "auth"}
-=======
 {"timestamp": "2025-11-18T16:20:55.366276Z", "username": "bob", "event": "login", "success": false, "reason": "User not found", "source": "auth"}
 {"timestamp": "2025-11-18T16:26:16.775496Z", "username": "bob", "event": "login", "success": false, "reason": "User not found", "source": "auth"}
 {"timestamp": "2025-11-18T16:30:07.547444Z", "username": "bob", "event": "login", "success": false, "reason": "User not found", "source": "auth"}
@@ -139,7 +138,8 @@
 {"timestamp": "2025-11-18T17:28:35.612241Z", "username": "bob", "event": "login", "success": false, "reason": "Invalid password", "source": "auth"}
 {"timestamp": "2025-11-18T17:32:15.049009Z", "username": "bob", "event": "login", "success": true, "reason": "Valid credentials", "source": "auth"}
 {"timestamp": "2025-11-18T17:32:37.983138Z", "username": "annie", "event": "login", "success": true, "reason": "Valid credentials", "source": "auth"}
->>>>>>> 5d740f50df0c378fafe74666beae779d365b3414
 {"timestamp": "2025-11-18T18:04:58.526845Z", "username": "bob", "event": "login", "success": false, "reason": "Invalid password", "source": "auth"}
 {"timestamp": "2025-11-18T18:05:07.825882Z", "username": "bob", "event": "login", "success": true, "reason": "Valid credentials", "source": "auth"}
 {"timestamp": "2025-11-18T18:10:03.168381Z", "username": "annie", "event": "login", "success": true, "reason": "Valid credentials", "source": "auth"}
+{"timestamp": "2025-11-18T20:19:13.738101Z", "username": "bob", "event": "login", "success": false, "reason": "Invalid password", "source": "auth"}
+{"timestamp": "2025-11-18T20:19:33.491983Z", "username": "bob", "event": "login", "success": true, "reason": "Valid credentials", "source": "auth"}
