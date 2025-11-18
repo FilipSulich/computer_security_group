@@ -98,20 +98,26 @@ class DirHandle:
 class Handles:
     def __init__(self):
         self._map = {}
+        self._paths = {}
         self._n = 1
 
-    def add(self, obj):
+    def add(self, obj, path=None):
         hid = str(self._n).encode()
         self._map[hid] = obj
+        if path:
+            self._paths[hid] = path
         self._n += 1
         return p_str(hid)
 
     def get(self, hid):
         return self._map.get(hid)
+    
+    def get_path(self, hid):
+        return self._paths.get(hid)
 
     def close(self, hid):
         self._map.pop(hid, None)
-
+        self._paths.pop(hid, None)
 
 #SFTP session - handling table management
 class SFTPSession(asyncssh.SSHServerSession):
@@ -313,7 +319,7 @@ class SFTPSession(asyncssh.SSHServerSession):
             except Exception as e:
                 return self._send_status(req_id, SSH_FX_FAILURE, str(e).encode())
 
-            handle = self.handles.add(f)
+            handle = self.handles.add(f, canon)
             return self._chan.write(pack_pkt(SSH_FXP_HANDLE, p_u32(req_id) + handle))
 
         #READ
@@ -327,7 +333,11 @@ class SFTPSession(asyncssh.SSHServerSession):
             if not f:
                 return self._send_status(req_id, SSH_FX_FAILURE, b"bad handle")
 
-            allowed, rec = self.ac.authorize(self.username, "read", "<file>")
+            file_path = self.handles.get_path(handle_bs)
+            if not file_path:
+                file_path = "<file>"
+
+            allowed, rec = self.ac.authorize(self.username, "read", file_path)
 
             if not allowed:
                 return self._send_status(req_id, SSH_FX_PERMISSION_DENIED, rec["reason"].encode())
@@ -353,7 +363,11 @@ class SFTPSession(asyncssh.SSHServerSession):
             if not f:
                 return self._send_status(req_id, SSH_FX_FAILURE, b"bad handle")
 
-            allowed, rec = self.ac.authorize(self.username, "write", "<file>")
+            file_path = self.handles.get_path(handle_bs)
+            if not file_path:
+                file_path = "<file>"
+
+            allowed, rec = self.ac.authorize(self.username, "write", file_path)
             if not allowed:
                 return self._send_status(req_id, SSH_FX_PERMISSION_DENIED, rec["reason"].encode())
 

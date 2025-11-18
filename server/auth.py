@@ -114,6 +114,14 @@ USER_DATABASE = {
     'alice': {
         'password_hash': hash_password('secure123'),
         'active': True
+    },
+    'james': {
+        'password_hash': hash_password('analyst456'),
+        'active': True
+    },
+    'annie': {
+        'password_hash': hash_password('admin789'),
+        'active': True
     }
 }
 

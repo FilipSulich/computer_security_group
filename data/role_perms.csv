@@ -1,7 +1,11 @@
 role,resource,read,write,delete
 intern,/internal/project,yes,no,no
 analyst,/internal/project,yes,yes,yes
+admin,/,yes,yes,yes
+admin,/confidential,yes,yes,yes
 admin,/confidential/admin,yes,yes,yes
+admin,/confidential/admin/secrets,yes,yes,yes
+admin,/confidential/admin/secrets/.hidden,yes,yes,yes
 analyst,/public/reports,yes,yes,yes
 intern,/public/reports,yes,yes,yes
 intern,/confidential/text,yes,yes,yes
