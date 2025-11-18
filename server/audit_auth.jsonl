@@ -142,3 +142,6 @@
 {"timestamp": "2025-11-18T18:10:03.168381Z", "username": "annie", "event": "login", "success": true, "reason": "Valid credentials", "source": "auth"}
 {"timestamp": "2025-11-18T20:19:13.738101Z", "username": "bob", "event": "login", "success": false, "reason": "Invalid password", "source": "auth"}
 {"timestamp": "2025-11-18T20:19:33.491983Z", "username": "bob", "event": "login", "success": true, "reason": "Valid credentials", "source": "auth"}
+{"timestamp": "2025-11-18T21:12:37.318458Z", "username": "bob", "event": "login", "success": false, "reason": "Invalid password", "source": "auth"}
+{"timestamp": "2025-11-18T21:12:42.492834Z", "username": "bob", "event": "login", "success": true, "reason": "Valid credentials", "source": "auth"}
+{"timestamp": "2025-11-18T21:24:06.487519Z", "username": "alice", "event": "login", "success": true, "reason": "Valid credentials", "source": "auth"}
