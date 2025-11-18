@@ -67,8 +67,8 @@ async def sftp_cli(sftp):
                 lpath = parts[2] if len(parts) > 2 else os.path.basename(rpath)
 
                 try:
-                    async with sftp.open(rpath, 'rb') as remote_file:
-                        with open(lpath, 'wb') as local_file:
+                    with open(lpath, 'wb') as local_file:
+                        async with sftp.open(rpath, 'rb') as remote_file:
                             while True:
                                 data = await remote_file.read(32768)
                                 if not data:
@@ -161,5 +161,3 @@ if __name__ == "__main__":
         asyncio.run(main())
     except (KeyboardInterrupt, SystemExit):
         print("\nClient stopped.")
-
- 

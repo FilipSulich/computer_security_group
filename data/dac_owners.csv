@@ -1,12 +1,13 @@
 path,owner,group,mode
-/public,alice,interns,0o755
+/,root,root,0o755
+/public,root,root,0o755
 /public/reports,alice,interns,0o741
 /public/policy,annie,admins,0o700
-/confidential,annie,admins,0o750
+/confidential,root,root,0o755
 /confidential/admin,annie,admins,0o750
+/confidential/text,annie,admins,0o777
 /confidential/admin/secrets,annie,admins,0o750
 /confidential/admin/secrets/.hidden,annie,admins,0o750
 /confidential/admin/secrets/.hidden/flag.txt,annie,admins,0o400
-/internal,james,analysts,0o755
+/internal,root,root,0o755
 /internal/project,james,analysts,0o760
-/confidential/text,annie,admins,0o777

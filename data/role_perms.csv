@@ -1,4 +1,10 @@
 role,resource,read,write,delete
+intern,/public,yes,no,no
+analyst,/public,yes,no,no
+admin,/public,yes,no,no
+intern,/internal,yes,no,no
+analyst,/internal,yes,no,no
+admin,/internal,yes,no,no
 intern,/internal/project,yes,no,no
 analyst,/internal/project,yes,yes,yes
 admin,/,yes,yes,yes

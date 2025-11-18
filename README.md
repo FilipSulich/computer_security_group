@@ -132,3 +132,78 @@ These tests verify that:
 - Logs are consistent, complete, and traceable for all access decisions.
 
 ---
+
+## Server Implementation (server.py)
+
+**1. SSH Transport via asyncssh (Requirement 1)**
+- Uses asyncssh library for SSH transport, encryption, and key exchange
+- Implements password-based authentication via `validate_user_password()`
+- SFTP runs as SSH subsystem named 'sftp'
+- Host key: Ed25519 key stored in `ssh_host_ed25519_key`
+- Server listens on port 2222
+
+**2. SFTP v3 Commands (Requirement 3)**
+Implemented commands:
+- `INIT/VERSION` - Protocol handshake
+- `REALPATH` - Path canonicalization
+- `STAT/LSTAT` - File attributes
+- `OPENDIR/READDIR` - Directory listing
+- `MKDIR` - Create directory
+- `OPEN` - Open file for read/write
+- `READ` - Read file data
+- `WRITE` - Write file data
+- `CLOSE` - Close handle
+
+**3. Path Security**
+- `canon_sftp_path()`: Converts SFTP paths to canonical POSIX format
+- `safe_join()`: Prevents directory traversal attacks (jail enforcement)
+- All paths validated before authorization and filesystem access
+
+**4. Handle Management**
+- `DirHandle`: Manages directory listing state
+- `FileHandle`: Stores file object + canonical path for authorization on READ/WRITE
+- Proper cleanup on CLOSE to prevent resource leaks
+
+**5. Security Features**
+- Default-deny policy
+- Path traversal prevention
+- Authorization on every file operation (including READ/WRITE)
+- Proper error codes (PERMISSION_DENIED, NO_SUCH_FILE, etc.)
+- No information disclosure in error messages
+
+---
+
+## Client Implementation (client.py)
+
+### How It Meets Assignment Requirements
+
+**1. SSH Connection**
+- Connects via asyncssh to server
+- Opens SFTP subsystem
+- Implements password authentication
+- Host key verification using TOFU (Trust On First Use)
+
+**2. SFTP CLI Commands (Requirement 4)**
+All required commands implemented:
+
+| Command | What It Does | SFTP Operations |
+|---------|--------------|-----------------|
+| `pwd` | Print working directory | REALPATH |
+| `ls [path]` | List directory contents | OPENDIR + READDIR |
+| `mkdir <path>` | Create directory | MKDIR |
+| `stat <path>` | Show file attributes | STAT |
+| `get <rpath> [lpath]` | Download file | OPEN + READ + CLOSE |
+| `put <lpath> <rpath>` | Upload file | OPEN + WRITE + CLOSE |
+| `quit` | Exit session | - |
+
+**3. User Experience**
+- Interactive command prompt: `sftp>`
+- Clear error messages for failed operations
+- Graceful handling of SFTP errors
+- Password prompt (hidden input via getpass)
+
+**4. Protocol Compliance**
+- Sends properly formatted SFTP v3 packets
+- Handles server responses correctly
+- Manages file handles for get/put operations
+- Supports both absolute and relative paths

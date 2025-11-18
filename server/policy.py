@@ -26,15 +26,17 @@ OPERATION_MAP_DAC = {
 
 class AccessControl:
     def __init__(self):
+        # Get the data directory relative to this script
+        self.data_dir = Path(__file__).parent.parent / "data"
         self.load_policies()
-        self.audit_file = open("../data/audit_policy.jsonl", "a")
+        self.audit_file = open(self.data_dir / "audit_policy.jsonl", "a")
 
     def load_policies(self):
         """Load all policy files with error handling"""
 
         # Load user_roles.json
         try:
-            with open("../data/user_roles.json") as f:
+            with open(self.data_dir / "user_roles.json") as f:
                 self.user_roles = json.load(f)
             print("[POLICY] Loaded user_roles.json")
         except Exception as e:
@@ -43,7 +45,7 @@ class AccessControl:
 
         # Load user_groups.json
         try:
-            with open("../data/user_groups.json") as f:
+            with open(self.data_dir / "user_groups.json") as f:
                 self.user_groups = json.load(f)
             print("[POLICY] Loaded user_groups.json")
         except Exception as e:
@@ -53,7 +55,7 @@ class AccessControl:
         # Load role_perms.csv
         try:
             self.role_perms = {}
-            with open("../data/role_perms.csv") as f:
+            with open(self.data_dir / "role_perms.csv") as f:
                 reader = csv.DictReader(f)
                 for row in reader:
                     role = row['role']
@@ -79,7 +81,7 @@ class AccessControl:
 
         # Load mac_labels.json
         try:
-            with open("../data/mac_labels.json") as f:
+            with open(self.data_dir / "mac_labels.json") as f:
                 mac_data = json.load(f)
                 self.user_clearances = mac_data['users']
                 self.path_labels = mac_data['paths']
@@ -92,7 +94,7 @@ class AccessControl:
         # Load dac_owners.csv
         try:
             self.dac_rules = {}
-            with open("../data/dac_owners.csv") as f:
+            with open(self.data_dir / "dac_owners.csv") as f:
                 reader = csv.DictReader(f)
                 for row in reader:
                     path_prefix = row['path']

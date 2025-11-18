@@ -34,7 +34,7 @@ MAX_FAILED_ATTEMPTS = 5
 LOCKOUT_DURATION = 300  # 5 minutes in seconds
 RATE_LIMIT_WINDOW = 60  # 1 minute
 MAX_ATTEMPTS_PER_WINDOW = 10
-AUDIT_LOG_PATH = './server/audit_auth.jsonl'
+AUDIT_LOG_PATH = os.path.join(os.path.dirname(__file__), 'audit_auth.jsonl')
 
 
 # In-memory tracking (in production, use Redis or database)
@@ -105,34 +105,37 @@ def verify_password(password: str, password_hash: str) -> bool:
         return False
 
 
-# hardcoded user database with 2 users for testing/demo purposes
-USER_DATABASE = {
-    'bob': {
-        'password_hash': hash_password('test'),
-        'active': True
-    },
-    'alice': {
-        'password_hash': hash_password('secure123'),
-        'active': True
-    },
-    'james': {
-        'password_hash': hash_password('analyst456'),
-        'active': True
-    },
-    'annie': {
-        'password_hash': hash_password('admin789'),
-        'active': True
-    }
-}
+# Path to user database file
+USER_DATABASE_PATH = os.path.join(os.path.dirname(__file__), '..', 'data', 'users.json')
 
+
+def load_users() -> list:
+    """Load users from JSON file (returns array)"""
+    try:
+        with open(USER_DATABASE_PATH, 'r') as f:
+            return json.load(f)
+    except FileNotFoundError:
+        print(f"Warning: User database not found at {USER_DATABASE_PATH}")
+        return []
+    except json.JSONDecodeError as e:
+        print(f"Error: Invalid JSON in user database: {e}")
+        return []
+
+def save_users(users: list):
+    """Save users to JSON file (saves as array)"""
+    os.makedirs(os.path.dirname(USER_DATABASE_PATH), exist_ok=True)
+    with open(USER_DATABASE_PATH, 'w') as f:
+        json.dump(users, f, indent=2)
 
 def get_user(username: str) -> Optional[dict]:
-    """Retrieve user from hardcoded database"""
-    return USER_DATABASE.get(username)
-
+    """Retrieve user from JSON database (searches array)"""
+    users = load_users()
+    for user in users:
+        if user.get('username') == username:
+            return user
+    return None
 
 # checks if user has exceeded rate limit
-
 def check_rate_limit(username: str) -> bool:
 
     now = time.time()
@@ -151,9 +154,7 @@ def check_rate_limit(username: str) -> bool:
     _rate_limit_tracker[username].append(now)
     return True
 
-
 # checks if account is locked out
-
 def is_locked_out(username: str) -> bool:
     """Check if account is locked out"""
     if username in _lockout_until:
@@ -166,7 +167,6 @@ def is_locked_out(username: str) -> bool:
     return False
 
 # records a failed login attempt
-
 def record_failed_attempt(username: str):
 
     _failed_attempts[username] += 1
@@ -248,7 +248,17 @@ def validate_user_password(username: str, password: str):
         return False
     
     # 5 - Verify password
-    password_hash = user['password_hash']
+    # Reconstruct full hash from stored salt and hash parts
+    salt = user.get('salt', '')
+    hash_part = user.get('password_hash', '')
+
+    if USE_ARGON2:
+        # Reconstruct Argon2 format: $argon2id$v=19$m=65536,t=2,p=1$<salt>$<hash>
+        password_hash = f"$argon2id$v=19$m=65536,t=2,p=1${salt}${hash_part}"
+    else:
+        # Reconstruct scrypt format: scrypt$<salt>$<hash>
+        password_hash = f"scrypt${salt}${hash_part}"
+
     if verify_password(password, password_hash):
         # Success!
         record_successful_attempt(username)
@@ -261,16 +271,81 @@ def validate_user_password(username: str, password: str):
         return False
 
 
+# TESTING SETUP - Create users with passwords
+def setup_test_users():
+    """Create test users in the database"""
+    users = [
+        {
+            "username": "bob",
+            "salt": "",
+            "password_hash": "",
+            "active": True
+        },
+        {
+            "username": "alice",
+            "salt": "",
+            "password_hash": "",
+            "active": True
+        },
+        {
+            "username": "james",
+            "salt": "",
+            "password_hash": "",
+            "active": True
+        },
+        {
+            "username": "annie",
+            "salt": "",
+            "password_hash": "",
+            "active": True
+        }
+    ]
+    
+    # Hash passwords and store
+    passwords = {
+        'bob': 'test',
+        'alice': 'secure123',
+        'james': 'analyst456',
+        'annie': 'admin789'
+    }
+    
+    for user in users:
+        username = user['username']
+        password = passwords[username]
+        full_hash = hash_password(password)
+        
+        if USE_ARGON2:
+            # Extract salt and hash from Argon2 format
+            parts = full_hash.split('$')
+            user['salt'] = parts[4]
+            user['password_hash'] = parts[5]
+        else:
+            # Extract from scrypt format
+            _, salt, hash_part = full_hash.split('$')
+            user['salt'] = salt
+            user['password_hash'] = hash_part
+    
+    save_users(users)
+    print("Test users created!")
+    print("Passwords: bob=test, alice=secure123, james=analyst456, annie=admin789")
+
+
 # testing/debugging functions
 if __name__ == "__main__":
     import getpass
+    import sys
+    
+    # Check if setup command
+    if len(sys.argv) > 1 and sys.argv[1] == 'setup':
+        setup_test_users()
+        sys.exit(0)
     
     print("=== Authentication Module Test ===\n")
     print(f"Using: {'Argon2id' if USE_ARGON2 else 'scrypt (fallback)'}")
     print(f"Pepper configured: {'Yes' if PEPPER != 'change-this-secret-pepper-in-production' else 'No (using default!)'}\n")
-    print("Available users: bob, alice")
-    print("Passwords: bob=test, alice=secure123\n")
-    print("Type 'quit' or 'exit' to stop\n")
+    print("Available users: bob, alice, james, annie")
+    print("Type 'quit' or 'exit' to stop")
+    print("Type 'setup' to create test users\n")
     
     # Interactive testing loop
     attempt_count = 0
@@ -282,6 +357,10 @@ if __name__ == "__main__":
             if username.lower() in ('quit', 'exit', 'q'):
                 print("\nExiting...")
                 break
+            
+            if username.lower() == 'setup':
+                setup_test_users()
+                continue
             
             if not username:
                 continue
@@ -303,7 +382,7 @@ if __name__ == "__main__":
                 print(f"✗ Authentication FAILED for '{username}'")
                 
                 # Show helpful info
-                if username in USER_DATABASE:
+                if get_user(username):
                     if is_locked_out(username):
                         remaining = int(_lockout_until.get(username, 0) - time.time())
                         print(f"  ⚠ Account is LOCKED OUT (unlocks in {remaining}s)")
