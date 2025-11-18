@@ -1,23 +1,57 @@
-# Notes for us:
-To whomever is later writing the server part!!!:
-To use the authorization method:
-```python
-import AccessControl from policy.py
-ACCESS_CONTROL = AccessControl()
-allowed, audit_log = authorize(user, operation, path)
+# Computer Security Group Project
+# SFTP Server with Multi-Layer Access Control
+
+## Quick Start
+
+### Prerequisites
+- Python 3.8+
+- Required packages: `asyncssh`, `argon2-cffi` (optional, falls back to scrypt)
+
+### Installation
+```bash
+# Install dependencies
+pip install asyncssh argon2-cffi
+
+# Generate SSH host key (if not exists)
+ssh-keygen -t ed25519 -f ssh_host_ed25519_key -N ""
 ```
-user = user name
-operation must be a supported operation (`realpath`, `stat`, `list`, `read`, `write`, `mkdir`, `remove`) -- map SFTP requests to these operations before calling
-path = path to the file
-example: authorize("alice", "read", "/public/file.txt")
 
-Very important to call the authorize method after jail canonicalization via safe_join
-and before any filesystem call!
-# Readme
+### Running the Server
+```bash
+cd server
+python server.py
+```
+Expected output:
+```
+[POLICY] Loaded user_roles.json
+[POLICY] Loaded user_groups.json
+[POLICY] Loaded role_perms.csv
+[POLICY] Loaded mac_labels.json
+[POLICY] Loaded dac_owners.csv
+[POLICY] All policy files loaded successfully
+✓ SFTP server running on port 2222
+```
 
-Things to write:
-- how to run (on Windows/macOS/Linux), expected outputs, known limitations
-- everything else regarding other sections of the project
+### Running the Client
+```bash
+cd client
+python client.py
+```
+Then login with credentials:
+- **alice** / BlueSky99 (Intern, Internal clearance)
+- **bob** / RedTiger42 (Intern, Public clearance)
+- **james** / GreenApple7 (Analyst, Internal clearance)
+- **annie** / {here goes the flag content} (Admin, Confidential clearance)
+
+### Platform Support
+- **Linux/macOS**: Fully supported
+- **Windows**: Supported 
+
+### Known Limitations
+- Server binds to port 2222 (requires available port)
+- In-memory authentication tracking (resets on restart)
+- Single-threaded async event loop
+- SFTP v3 protocol only (no v4/v5/v6 extensions)
 
 ## Pasword policy
 
@@ -216,24 +250,9 @@ All required commands implemented:
 - Supports both absolute and relative paths
 
 ## CTF Flag
-**Location:** `/confidential/admin/secrets/.hidden/flag.txt`  
-**Flag:** `FLAG{group_CS_triple_layer_victory}`
-
 The flag is protected by three independent security layers:
 - **DAC**: File owned by annie with mode 0o400 (read-only for owner)
 - **MAC**: Requires "confidential" clearance (only annie has this)
 - **RBAC**: Requires "admin" role (only annie has this)
 
 See `CTF_writeup.pdf` for complete analysis.
-
-**Test successful access:**
-```bash
-python client/client.py
-# Username: annie, Password: admin789
-sftp> get /confidential/admin/secrets/.hidden/flag.txt ./flag.txt
-```
-
-**Test denied access:**
-```bash
-# Bob and James are blocked by all three layers
-```

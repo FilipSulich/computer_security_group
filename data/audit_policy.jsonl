@@ -497,3 +497,17 @@
 {"timestamp": "2025-11-18T18:38:27.445575", "user": "alice", "operation": "read", "path": "/public/reports", "allowed": true, "reason": "Allowed by all policies"}
 {"timestamp": "2025-11-18T18:38:27.445918", "user": "alice", "operation": "read", "path": "/public/reports", "allowed": true, "reason": "Allowed by all policies"}
 {"timestamp": "2025-11-18T18:38:27.446296", "user": "james", "operation": "read", "path": "/public/reports", "allowed": false, "reason": "DAC: DENY, other lacks permission on /public/reports (mode=0o741) | MAC: ALLOW | RBAC: ALLOW"}
+{"timestamp": "2025-11-18T19:05:28.326113", "user": "bob", "operation": "read", "path": "/public/../confidential/admin/secrets/.hidden/flag.txt", "allowed": true, "reason": "Allowed by all policies"}
+{"timestamp": "2025-11-18T19:05:28.327960", "user": "bob", "operation": "read", "path": "/public/../confidential/admin/secrets/.hidden/flag.txt", "allowed": true, "reason": "Allowed by all policies"}
+{"timestamp": "2025-11-18T19:05:28.328459", "user": "bob", "operation": "read", "path": "/public/../confidential/admin/secrets/.hidden/flag.txt", "allowed": true, "reason": "Allowed by all policies"}
+{"timestamp": "2025-11-18T19:05:28.329161", "user": "bob", "operation": "read", "path": "/public/../confidential/admin/secrets/.hidden/flag.txt", "allowed": true, "reason": "Allowed by all policies"}
+{"timestamp": "2025-11-18T19:05:28.330885", "user": "bob", "operation": "read", "path": "/public/../confidential/admin/secrets/.hidden/flag.txt", "allowed": true, "reason": "Allowed by all policies"}
+{"timestamp": "2025-11-18T19:05:28.331275", "user": "bob", "operation": "read", "path": "/public/../confidential/admin/secrets/.hidden/flag.txt", "allowed": true, "reason": "Allowed by all policies"}
+{"timestamp": "2025-11-18T19:09:21.350370", "user": "bob", "operation": "list", "path": "/", "allowed": false, "reason": "DAC: ALLOW | MAC: DENY, no read up (public < confidential) | RBAC: DENY, no matching role permission"}
+{"timestamp": "2025-11-18T19:09:46.792247", "user": "bob", "operation": "list", "path": "/confidential/admin/secrets/.hidden/flag.txt", "allowed": false, "reason": "DAC: DENY, other lacks permission on /confidential/admin/secrets/.hidden/flag.txt (mode=0o400) | MAC: DENY, no read up (public < confidential) | RBAC: DENY, no matching role permission"}
+{"timestamp": "2025-11-18T19:10:20.555162", "user": "annie", "operation": "read", "path": "/confidential/admin/secrets/.hidden/flag.txt", "allowed": true, "reason": "Allowed by all policies"}
+{"timestamp": "2025-11-18T19:10:20.558171", "user": "annie", "operation": "read", "path": "/confidential/admin/secrets/.hidden/flag.txt", "allowed": true, "reason": "Allowed by all policies"}
+{"timestamp": "2025-11-18T19:10:20.558609", "user": "annie", "operation": "read", "path": "/confidential/admin/secrets/.hidden/flag.txt", "allowed": true, "reason": "Allowed by all policies"}
+{"timestamp": "2025-11-18T19:10:20.559586", "user": "annie", "operation": "read", "path": "/confidential/admin/secrets/.hidden/flag.txt", "allowed": true, "reason": "Allowed by all policies"}
+{"timestamp": "2025-11-18T19:10:20.560641", "user": "annie", "operation": "read", "path": "/confidential/admin/secrets/.hidden/flag.txt", "allowed": true, "reason": "Allowed by all policies"}
+{"timestamp": "2025-11-18T19:10:20.560930", "user": "annie", "operation": "read", "path": "/confidential/admin/secrets/.hidden/flag.txt", "allowed": true, "reason": "Allowed by all policies"}
