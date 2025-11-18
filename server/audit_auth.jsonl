@@ -57,7 +57,6 @@
 {"timestamp": "2025-11-17T23:26:52.114543Z", "username": "alice", "event": "login", "success": true, "reason": "Valid credentials", "source": "auth"}
 {"timestamp": "2025-11-17T23:27:00.426182Z", "username": "james", "event": "login", "success": true, "reason": "Valid credentials", "source": "auth"}
 {"timestamp": "2025-11-17T23:27:07.938145Z", "username": "annie", "event": "login", "success": true, "reason": "Valid credentials", "source": "auth"}
-<<<<<<< HEAD
 {"timestamp": "2025-11-18T12:39:21.291334Z", "username": "alice", "event": "login", "success": true, "reason": "Valid credentials", "source": "auth"}
 {"timestamp": "2025-11-18T15:46:09.001559Z", "username": "bob", "event": "login", "success": true, "reason": "Valid credentials", "source": "auth"}
 {"timestamp": "2025-11-18T15:46:11.417057Z", "username": "bob", "event": "login", "success": true, "reason": "Valid credentials", "source": "auth"}

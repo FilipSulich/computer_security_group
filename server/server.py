@@ -304,7 +304,6 @@ class SFTPSession(asyncssh.SSHServerSession):
             filename, off = ustr(payload, off)
             flags, off = u32(payload, off)
 
-            # Normalize path separators for cross-platform compatibility
             safe_path = filename.decode(errors="replace").replace("\\", "/")
 
             op = "write" if flags & PF_WRITE else "read"

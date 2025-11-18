@@ -1,4 +1,4 @@
-# Computer Security Group Project
+# Computer Security Project - Group 5
 # SFTP Server with Multi-Layer Access Control
 
 ## Quick Start
@@ -249,4 +249,4 @@ All required commands implemented:
 - Supports both absolute and relative paths
 
 ## CTF Flag
-There is a hidden flag in the code, which contains the password for annie's account.
+There is a hidden flag in the code, which contains the password for annie's account. Try to find it :)

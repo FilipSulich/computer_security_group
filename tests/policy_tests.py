@@ -188,19 +188,6 @@ def test_composite_test_deny_mac_only(ac):
     assert ac.check_rbac('alice', 'read', '/confidential/text')[0]
     assert ac.check_rbac('alice', 'write', '/confidential/text')[0]
 
-# def test_composite_test_deny_rbac_only(ac):
-#     """If user is denied by rbac, but allowed by dac,mac, system denies access"""
-#     # check if system denies access
-#     assert not ac.authorize('annie', 'read', '/confidential/text')[0]
-#     assert not ac.authorize('annie', 'write', '/confidential/text')[0]
-
-#     # check individual methods (should return: dac: true, mac: true, rbac: false)
-#     assert ac.check_dac('annie', 'read', '/confidential/text')[0]
-#     assert ac.check_dac('annie', 'write', '/confidential/text')[0]
-#     assert ac.check_mac('annie', 'read', '/confidential/text')[0]
-#     assert ac.check_mac('annie', 'write', '/confidential/text')[0]
-#     assert not ac.check_rbac('annie', 'read', '/confidential/text')[0]
-#     assert not ac.check_rbac('annie', 'write', '/confidential/text')[0]
 
 #AUDIT ASSERTION TESTS:
 def test_audit_allowed_action(ac):
