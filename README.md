@@ -249,9 +249,4 @@ All required commands implemented:
 - Supports both absolute and relative paths
 
 ## CTF Flag
-The flag is protected by three independent security layers:
-- **DAC**: File owned by annie with mode 0o400 (read-only for owner)
-- **MAC**: Requires "confidential" clearance (only annie has this)
-- **RBAC**: Requires "admin" role (only annie has this)
-
-See `CTF_writeup.pdf` for complete analysis.
+There is a hidden flag in the code, which contains the password for annie's account.
