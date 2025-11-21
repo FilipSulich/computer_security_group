@@ -130,13 +130,13 @@ async def main():
     print(f"Connecting to {host}:{port} as {username}...")
 
     try:
-        # ex 1.2
+        # ex 1.2 - TOFU host key verification
         async with asyncssh.connect(
             host,
             port,
             username=username,
             password=password,
-            known_hosts=None  # TOFU host key verification
+            known_hosts=None  
         ) as conn:
             print("✓ SSH connection established")
             print("✓ Host key verified (TOFU)")

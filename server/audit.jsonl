@@ -145,3 +145,8 @@
 {"timestamp": "2025-11-18T21:12:37.318458Z", "username": "bob", "event": "login", "success": false, "reason": "Invalid password", "source": "auth"}
 {"timestamp": "2025-11-18T21:12:42.492834Z", "username": "bob", "event": "login", "success": true, "reason": "Valid credentials", "source": "auth"}
 {"timestamp": "2025-11-18T21:24:06.487519Z", "username": "alice", "event": "login", "success": true, "reason": "Valid credentials", "source": "auth"}
+{"timestamp": "2025-11-18T21:34:03.686223Z", "username": "bob", "event": "login", "success": false, "reason": "Invalid password", "source": "auth"}
+{"timestamp": "2025-11-18T21:34:20.079790Z", "username": "bob", "event": "login", "success": true, "reason": "Valid credentials", "source": "auth"}
+{"timestamp": "2025-11-18T22:07:58.396694Z", "username": "bob", "event": "login", "success": true, "reason": "Valid credentials", "source": "auth"}
+{"timestamp": "2025-11-18T22:12:02.823487Z", "username": "bob", "event": "login", "success": true, "reason": "Valid credentials", "source": "auth"}
+{"timestamp": "2025-11-18T22:17:55.832784Z", "username": "bob", "event": "login", "success": true, "reason": "Valid credentials", "source": "auth"}

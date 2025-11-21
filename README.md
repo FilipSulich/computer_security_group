@@ -49,6 +49,7 @@ Then login with credentials:
 
 ### Known Limitations
 - Server binds to port 2222 (requires available port)
+- In - memory tracking only
 - Single-threaded async event loop
 - SFTP v3 protocol only (no v4/v5/v6 extensions)
 
@@ -59,7 +60,7 @@ Our password policy implements the following security measures:
 2. Secure password verification - constant-time comparison for scrypt hashes to prevent timing attacks
 3. Account lockout - after 5 consecutive failed attemts the account is locked for 5 minutes
 4. Rate limiting - maximum of 10 login attemts within a 1-minute window
-5. Audit logging - all authentication events are logged to audit_auth.jsonl
+5. Audit logging - all authentication events are logged to audit.jsonl
 
 ### Loading
 After initialisation of AccessControl if any of the data files fails to load properly the server exits and prints an error message. 
